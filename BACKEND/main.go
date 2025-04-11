@@ -6,8 +6,10 @@ import (
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"gadgetGalaxy/dbquery"
@@ -15,14 +17,20 @@ import (
 	"gadgetGalaxy/middleware"
 )
 
-var (
-	dbUser = "root"
-	dbPass = ""
-	dbAddr = "localhost:3306"
-	dbName = "gadget_galaxy"
-)
-
 func main() {
+	fmt.Println("Loading .env variables...")
+
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("error: %s\n", err.Error())
+	}
+
+	dbUser := os.Getenv("DB_USER")
+	dbPass := os.Getenv("DB_PASS")
+	dbAddr := os.Getenv("DB_ADDR")
+	dbName := os.Getenv("DB_NAME")
+
+	//goland:noinspection GoPrintFunctions
+	fmt.Println("Loading successful!\n")
 	fmt.Println("Connecting to database...")
 
 	err := dbquery.ConnectToDb(dbUser, dbPass, dbAddr, dbName)
@@ -31,13 +39,14 @@ func main() {
 		log.Fatalf("error: %s\n", err.Error())
 	}
 
-	fmt.Println("Connection successful!")
+	//goland:noinspection GoPrintFunctions
+	fmt.Println("Connection successful!\n")
 	fmt.Println("Starting REST API server...")
 
 	// gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	store, err := redis.NewStore(10, "tcp", "127.0.0.1:6379", "", []byte("secret"))
+	store, err := redis.NewStore(10, "tcp", "127.0.0.1:6379", "", "secret")
 
 	if err != nil {
 		log.Fatalf("error: %s\n", err.Error())
@@ -78,6 +87,7 @@ func main() {
 
 	// --- Product handling ---
 	api.GET("/products", product.AllProductsHandler)
+	api.POST("/searchProducts", product.SearchProductHandler)
 	// ---
 
 	// --- Test endpoints ---

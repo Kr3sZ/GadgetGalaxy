@@ -8,8 +8,9 @@ import (
 )
 
 var (
-	db          *sql.DB
-	NotFoundErr = errors.New("error: not found")
+	db            *sql.DB
+	NotFoundErr   = errors.New("error: not found")
+	UnexpectedErr = errors.New("error: unexpected")
 )
 
 func ConnectToDb(user string, pass string, addr string, dbName string) error {
@@ -185,14 +186,63 @@ func SelectAllProducts() ([]Product, error) {
 	return products, nil
 }
 
-func SearchProducts(keyword string, category string, sort int) ([]Product, error) {
-	rows, err := db.Query("select * from products order by ?")
+func SearchProducts(keyword string, category string, sort Sort) ([]Product, error) {
+	var products []Product
+	var err error
+
+	if sort == None {
+		if products, err = SelectAllProducts(); err != nil {
+			return nil, err
+		}
+	} else {
+		var order string
+
+		switch sort {
+		case PriceAsc:
+			order = "price ASC"
+			break
+
+		case PriceDesc:
+			order = "price DESC"
+			break
+
+		case NameAsc:
+			order = "name ASC"
+			break
+
+		case NameDesc:
+			order = "name DESC"
+			break
+
+		default:
+			return nil, UnexpectedErr
+		}
+
+		var rows *sql.Rows
+		rows, err = db.Query("select * from products order by ?", order)
+
+		if err != nil {
+			return nil, err
+		}
+
+		for rows.Next() {
+			var product Product
+
+			err = rows.Scan(&product.Name,
+				&product.Category,
+				&product.Price,
+				&product.Amount,
+				&product.Description)
+
+			if err != nil {
+				return nil, err
+			}
+
+			products = append(products, product)
+		}
+	}
 
 	var foundProd []Product
-
-	if err != nil {
-		return nil, err
-	}
 
 	lowerKeyword := strings.ToLower(keyword)
 	lowerCat := strings.ToLower(category)
