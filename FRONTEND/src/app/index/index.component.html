@@ -1,0 +1,54 @@
+<div class="min-h-screen bg-gray-100">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-gray-800">Gadget Galaxy</h1>
+    <div class="flex space-x-4">
+      <a href="/cart" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">Cart</a>
+      <a href="/login" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Login</a>
+      <a href="/register" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Sign Up</a>
+    </div>
+  </nav>
+
+  <!-- Search, Filter & Sort Bar -->
+  <div class="p-6 max-w-5xl mx-auto flex justify-between items-center space-x-4">
+    <input type="text" placeholder="Search for products..." class="w-2/4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+    <select class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+      <option value="all">All Categories</option>
+      <option value="electronics">Electronics</option>
+      <option value="clothing">Clothing</option>
+      <option value="home">Home & Kitchen</option>
+      <option value="sports">Sports</option>
+    </select>
+    <select class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+      <option value="default">Sort By</option>
+      <option value="price-low">Price: Low to High</option>
+      <option value="price-high">Price: High to Low</option>
+      <option value="newest">Newest Arrivals</option>
+    </select>
+  </div>
+
+  <!-- Products -->
+  <div class="p-6 max-w-5xl mx-auto">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Featured Products</h2>
+    <div class="grid grid-cols-3 gap-6">
+      <div class="bg-white p-4 rounded-lg shadow-lg">
+        <img src="https://via.placeholder.com/150" class="w-full h-40 object-cover rounded-md">
+        <h3 class="mt-2 font-semibold">Product 1</h3>
+        <p class="text-gray-600">$49.99</p>
+        <button class="mt-2 w-full bg-blue-600 text-white py-2 rounded-lg">Add to Cart</button>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow-lg">
+        <img src="https://via.placeholder.com/150" class="w-full h-40 object-cover rounded-md">
+        <h3 class="mt-2 font-semibold">Product 2</h3>
+        <p class="text-gray-600">$79.99</p>
+        <button class="mt-2 w-full bg-blue-600 text-white py-2 rounded-lg">Add to Cart</button>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow-lg">
+        <img src="https://via.placeholder.com/150" class="w-full h-40 object-cover rounded-md">
+        <h3 class="mt-2 font-semibold">Product 3</h3>
+        <p class="text-gray-600">$29.99</p>
+        <button class="mt-2 w-full bg-blue-600 text-white py-2 rounded-lg">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>

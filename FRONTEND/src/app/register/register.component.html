@@ -1,0 +1,46 @@
+<div class="flex sm:h-full w-full items-center justify-center bg-gray-100">
+  <div class="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg">
+    <h2 class="text-2xl font-semibold text-center text-gray-800">Register</h2>
+    <form class="mt-6 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="username">Username</label>
+        <input id="username" name="username" type="text" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your username" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="firstname">First name</label>
+        <input id="firstname" name="firstname" type="text" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your first name" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="lastname">Last name</label>
+        <input id="lastname" name="lastname" type="text" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your last name" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="email">Email</label>
+        <input id="email" name="email" type="email" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your email" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="phone">Phone Number</label>
+        <input id="phone" name="phone" type="tel" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your phone number" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="birthdate">Birthdate</label>
+        <input id="birthdate" name="birthDate" type="date" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="password">Password</label>
+        <input id="password" name="password" type="password" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Create a password" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Confirm your password" required>
+      </div>
+      <button class="w-full bg-purple-700 text-white py-2 rounded-lg font-medium">Register</button>
+    </form>
+    <p class="mt-4 text-center text-sm text-gray-600">
+      Already have an account? <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" class="text-purple-600 hover:underline">Login</a>
+    </p>
+    <p class="mt-4 text-center text-sm text-gray-600">
+      <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" class="text-purple-600 hover:underline">Back to home</a>
+    </p>
+  </div>
+</div>
