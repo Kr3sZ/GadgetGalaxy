@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"gadgetGalaxy/dbquery"
 	"gadgetGalaxy/handler"
@@ -18,10 +17,11 @@ import (
 )
 
 func main() {
+	fmt.Println("\n-----------------")
 	fmt.Println("Loading .env variables...")
 
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("error: %s\n", err.Error())
+		fmt.Println("Unable to find .env file in go project root, using system environment values.")
 	}
 
 	dbUser := os.Getenv("DB_USER")
@@ -46,7 +46,8 @@ func main() {
 	// gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	store, err := redis.NewStore(10, "tcp", "127.0.0.1:6379", "", "secret")
+	store, err := redis.NewStore(10, "tcp", os.Getenv("REDIS_ADDR"), os.Getenv("REDIS_USER"),
+		os.Getenv("REDIS_PASS"), []byte(os.Getenv("REDIS_AUTH")))
 
 	if err != nil {
 		log.Fatalf("error: %s\n", err.Error())
