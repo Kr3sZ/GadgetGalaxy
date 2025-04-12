@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"gadgetGalaxy/dbquery"
 	"gadgetGalaxy/handler"
@@ -45,8 +46,7 @@ func main() {
 	// gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	store, err := redis.NewStore(10, "tcp", "127.0.0.1:6379", os.Getenv("REDIS_USER"),
-		os.Getenv("REDIS_PASS"), []byte(os.Getenv("REDIS_AUTH")))
+	store, err := redis.NewStore(10, "tcp", "127.0.0.1:6379", "", "secret")
 
 	if err != nil {
 		log.Fatalf("error: %s\n", err.Error())

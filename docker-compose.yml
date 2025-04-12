@@ -1,12 +1,27 @@
-name: GadgetGalaxy
 version: '3.8'
+name: GadgetGalaxy
 
 services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"  # Expose MySQL to host
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
   redis:
     image: redis:latest
     container_name: redis
     ports:
-      - "6379:6379"
+      - "6379:6379"  # Expose Redis to host
     restart: unless-stopped
 
   backend:
@@ -14,17 +29,23 @@ services:
       context: ./backend
     container_name: backend
     ports:
-      - "8080:8080"
+      - "8080:8080"  # Expose Backend to host
     depends_on:
       - redis
+      - mysql
     restart: unless-stopped
+    env_file:
+      - .env
 
   frontend:
     build:
       context: ./frontend
     container_name: frontend
     ports:
-      - "80:80"
+      - "80:80"  # Expose Frontend to host
     depends_on:
       - backend
     restart: unless-stopped
+
+volumes:
+  mysql_data:

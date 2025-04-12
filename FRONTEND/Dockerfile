@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 80
 
 # Run
-CMD ["ng", "serve", "--port","80"]
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port","80"]
