@@ -16,6 +16,12 @@ type (
 		Category string       `json:"category"`
 		Sort     dbquery.Sort `json:"sort"`
 	}
+
+	orderRequest struct {
+		Username string                 `json:"username"`
+		Products []dbquery.OrderProduct `json:"products"`
+		Address  string                 `json:"address"`
+	}
 )
 
 func NewProductHandler() *ProductHandler {
@@ -63,5 +69,30 @@ func (h *ProductHandler) SearchProductHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"error":   false,
 		"message": products,
+	})
+}
+
+func (h *ProductHandler) OrderHandler(c *gin.Context) {
+	var order orderRequest
+
+	if err := c.ShouldBindJSON(&order); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := dbquery.AddOrder(order.Username, order.Products, order.Address); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "success",
 	})
 }

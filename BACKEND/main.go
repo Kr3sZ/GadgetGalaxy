@@ -6,7 +6,7 @@ import (
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
-	//"github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -20,11 +20,10 @@ import (
 func main() {
 	fmt.Println("Loading .env variables...")
 
-	/*
-		if err := godotenv.Load(); err != nil {
-			log.Fatalf("error: %s\n", err.Error())
-		}
-	*/
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("error: %s\n", err.Error())
+	}
+
 	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv("DB_PASS")
 	dbAddr := os.Getenv("DB_ADDR")
@@ -33,7 +32,6 @@ func main() {
 	//goland:noinspection GoPrintFunctions
 	fmt.Println("Loading successful!\n")
 	fmt.Println("Connecting to database...")
-	fmt.Println(dbUser, dbPass, dbAddr, dbName)
 
 	err := dbquery.ConnectToDb(dbUser, dbPass, dbAddr, dbName)
 
@@ -48,7 +46,7 @@ func main() {
 	// gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	store, err := redis.NewStore(10, "tcp", "127.0.0.1:6379", "", "", []byte("secret"))
+	store, err := redis.NewStore(10, "tcp", "127.0.0.1:6379", "", "secret")
 
 	if err != nil {
 		log.Fatalf("error: %s\n", err.Error())
@@ -90,13 +88,17 @@ func main() {
 	// --- Product handling ---
 	api.GET("/products", product.AllProductsHandler)
 	api.POST("/searchProducts", product.SearchProductHandler)
+
+	apiAuth.POST("/order", product.OrderHandler)
 	// ---
 
 	// --- Test endpoints ---
-	api.GET("/hello", func(c *gin.Context) {
+	apiAuth.GET("/hello", func(c *gin.Context) {
+		session := sessions.Default(c)
+
 		c.JSON(http.StatusOK, gin.H{
 			"error":   false,
-			"message": strings.Contains("asd asd", ""),
+			"message": session.Get("id"),
 		})
 	})
 	// ---
