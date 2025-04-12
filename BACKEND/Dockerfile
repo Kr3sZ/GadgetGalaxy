@@ -1,28 +1,23 @@
-# Base image for builds
+# Build stage
 FROM golang:1.24-alpine AS builder
 
-# Working directory for container
 WORKDIR /app
 
-# Dependencies
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Application
 COPY . .
 
-# Build
 RUN go build -o server .
 
 # Final image
 FROM alpine:latest
 
-# Finalizing
 WORKDIR /app
-COPY --from=builder /app/server .
 
-# Port exposion
+COPY --from=builder /app/server .
+# optional: only if godotenv is used
+
 EXPOSE 8080
 
-# Run
 CMD ["./server"]
