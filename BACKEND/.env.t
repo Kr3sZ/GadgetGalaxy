@@ -2,3 +2,7 @@ DB_USER=""
 DB_PASS=""
 DB_ADDR=""
 DB_NAME=""
+
+REDIS_USER=""
+REDIS_PASS=""
+REDIS_AUTH=""

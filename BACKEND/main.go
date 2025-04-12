@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"gadgetGalaxy/dbquery"
 	"gadgetGalaxy/handler"
@@ -46,7 +45,8 @@ func main() {
 	// gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	store, err := redis.NewStore(10, "tcp", "127.0.0.1:6379", "", "secret")
+	store, err := redis.NewStore(10, "tcp", "127.0.0.1:6379", os.Getenv("REDIS_USER"),
+		os.Getenv("REDIS_PASS"), []byte(os.Getenv("REDIS_AUTH")))
 
 	if err != nil {
 		log.Fatalf("error: %s\n", err.Error())
@@ -88,13 +88,17 @@ func main() {
 	// --- Product handling ---
 	api.GET("/products", product.AllProductsHandler)
 	api.POST("/searchProducts", product.SearchProductHandler)
+
+	apiAuth.POST("/order", product.OrderHandler)
 	// ---
 
 	// --- Test endpoints ---
-	api.GET("/hello", func(c *gin.Context) {
+	apiAuth.GET("/hello", func(c *gin.Context) {
+		session := sessions.Default(c)
+
 		c.JSON(http.StatusOK, gin.H{
 			"error":   false,
-			"message": strings.Contains("asd asd", ""),
+			"message": session.Get("id"),
 		})
 	})
 	// ---
