@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	db            *sql.DB
-	NotFoundErr   = errors.New("error: not found")
-	UnexpectedErr = errors.New("error: unexpected")
+	db              *sql.DB
+	NotFoundErr     = errors.New("error: not found")
+	UnexpectedErr   = errors.New("error: unexpected")
+	NotAvailableErr = errors.New("error: product not available")
 )
 
 func ConnectToDb(user string, pass string, addr string, dbName string) error {
@@ -57,6 +58,11 @@ type (
 		Price       float64 `json:"price"`
 		Amount      int     `json:"amount"`
 		Description string  `json:"description"`
+	}
+
+	OrderProduct struct {
+		Id       int64 `json:"id"`
+		Quantity int64 `json:"quantity"`
 	}
 
 	Sort int64
@@ -258,4 +264,65 @@ func SearchProducts(keyword string, category string, sort Sort) ([]Product, erro
 	}
 
 	return foundProd, nil
+}
+
+func AddOrder(username string, products []OrderProduct, address string) error {
+	row, err := db.Query("select * from users where username = ?", username)
+
+	if err != nil {
+		return err
+	}
+
+	if !row.Next() {
+		return NotFoundErr
+	}
+
+	_, err = db.Exec("insert into orders (username, address, status) values (?, ?, 'preparing')", username, address)
+
+	if err != nil {
+		return err
+	}
+
+	var id int64
+	row, err = db.Query("select id from orders where username like ? order by id desc limit 1", username)
+
+	if err != nil {
+		return err
+	}
+
+	if !row.Next() {
+		return UnexpectedErr
+	}
+
+	err = row.Scan(&id)
+
+	if err != nil {
+		return err
+	}
+
+	for _, val := range products {
+		row, err = db.Query("select * from products where id = ? and amount >= ?", val.Id, val.Quantity)
+
+		if err != nil {
+			return err
+		}
+
+		if !row.Next() {
+			return NotAvailableErr
+		}
+
+		_, err = db.Exec("insert into order_product (order_id, prod_id, amount) values (?, ?, ?)", id, val.Id, val.Quantity)
+
+		if err != nil {
+			return err
+		}
+
+		_, err = db.Exec("update products set amount = amount - ? where id = ?", val.Quantity, val.Id)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

@@ -1,15 +1,13 @@
 package utils
 
 import (
-	"hash/fnv"
+	"crypto/sha256"
 )
 
-func Hash(str string) (uint32, error) {
-	h := fnv.New32a()
+func Hash(str string) ([]byte, error) {
+	h := sha256.New()
 
-	if _, err := h.Write([]byte(str)); err != nil {
-		return 0, err
-	}
+	h.Write([]byte(str))
 
-	return h.Sum32(), nil
+	return h.Sum(nil), nil
 }

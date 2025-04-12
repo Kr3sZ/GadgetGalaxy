@@ -5,7 +5,6 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 
 	"gadgetGalaxy/dbquery"
 	"gadgetGalaxy/utils"
@@ -112,7 +111,7 @@ func (h *UserHandler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	session.Set("id", strconv.FormatUint(uint64(hash), 10))
+	session.Set("id", string(hash))
 
 	if err = session.Save(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
