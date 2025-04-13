@@ -11,7 +11,7 @@ MYSQL_PASSWORD=""
 # Backend
 DB_USER=""
 DB_PASS=""
-DB_ADDR=""                     # mysql:port
+DB_ADDR=""                     # mariadb:port
 DB_NAME=""                     # gadget_galaxy
 
 # Redis

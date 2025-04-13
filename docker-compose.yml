@@ -33,7 +33,7 @@ services:
       - "8080:8080"  # Expose Backend to host
     depends_on:
       - redis
-      - mysql
+      - mariadb
     restart: unless-stopped
     env_file:
       - .env
