@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 13, 2025 at 02:43 PM
+-- Generation Time: Apr 14, 2025 at 12:34 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -115,15 +115,16 @@ CREATE TABLE `users` (
   `email` varchar(64) NOT NULL,
   `phone_num` varchar(16) NOT NULL,
   `password` varchar(512) NOT NULL,
-  `birth_date` varchar(16) NOT NULL
+  `birth_date` varchar(16) NOT NULL,
+  `token` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `phone_num`, `password`, `birth_date`) VALUES
-('username', 'first', 'lastest', 'email@email.com', '+36307654321', 'asdkuhudfygbfuioewnasocbfugerwf', '2000-01-01');
+INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `phone_num`, `password`, `birth_date`, `token`) VALUES
+('username', 'first', 'lastest', 'email@email.com', '+36307654321', '5751a44782594819e4cb8aa27c2c9d87a420af82bc6a5a05bc7f19c3bb00452b', '2000-01-01', 'a995cedbc6b75175ca8913ee17ea761338cbd01bd9b76a0220b522d21adb8ae8');
 
 --
 -- Indexes for dumped tables
@@ -160,7 +161,8 @@ ALTER TABLE `products`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`username`);
+  ADD PRIMARY KEY (`username`),
+  ADD UNIQUE KEY `token` (`token`);
 
 --
 -- AUTO_INCREMENT for dumped tables
