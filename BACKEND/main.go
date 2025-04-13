@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
+	"github.com/gin-gonic/contrib/cors"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -47,6 +48,7 @@ func main() {
 
 	router := gin.Default()
 
+	// --- Session management ---
 	redisUser := os.Getenv("REDIS_USER")
 	redisPass := os.Getenv("REDIS_PASS")
 	redisAddr := os.Getenv("REDIS_ADDR")
@@ -59,8 +61,19 @@ func main() {
 	}
 
 	router.Use(sessions.Sessions("mySession", store))
+	// ---
 
-	// -- Url groups
+	// --- CORS ---
+	router.Use(cors.New(cors.Config{
+		AllowedOrigins: []string{"http://localhost:4200", "http://localhost:80"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders: []string{"Content-Type"},
+		ExposedHeaders: []string{"Content-Type", "Content-Length", "Content-Description", "Content-Transfer-Encoding",
+			"Content-Disposition"},
+	}))
+	// ---
+
+	// --- Url groups ---
 	api := router.Group("/api")
 
 	apiAuth := api.Group("/auth")
