@@ -96,7 +96,7 @@ func (h *ProductHandler) ProductImageHandler(c *gin.Context) {
 		return
 	}
 
-	var img dbquery.ProductImage
+	var img []byte
 	img, err = dbquery.GetProductImage(id)
 
 	if err != nil {
@@ -133,7 +133,13 @@ func (h *ProductHandler) OrderHandler(c *gin.Context) {
 	}
 
 	if err := dbquery.AddOrder(order.Username, order.Products, order.Address); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		status := http.StatusInternalServerError
+
+		if errors.Is(err, dbquery.NotFoundErr) {
+			status = http.StatusNotFound
+		}
+
+		c.JSON(status, gin.H{
 			"error":   true,
 			"message": err.Error(),
 		})
