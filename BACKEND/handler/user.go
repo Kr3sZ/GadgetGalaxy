@@ -74,7 +74,7 @@ func (h *UserHandler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	user, err := dbquery.SelectUserByName(loginReq.Username)
+	pass, err := dbquery.SelectUserPassword(loginReq.Username)
 
 	if err != nil {
 		if errors.Is(err, dbquery.NotFoundErr) {
@@ -92,7 +92,7 @@ func (h *UserHandler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	if loginReq.Password != user.Password {
+	if loginReq.Password != pass {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error":   true,
 			"message": "error: invalid credentials",
@@ -101,7 +101,7 @@ func (h *UserHandler) LoginHandler(c *gin.Context) {
 	}
 
 	session := sessions.Default(c)
-	hash, err := utils.Hash(user.Username)
+	hash, err := utils.Hash(loginReq.Username)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

@@ -78,24 +78,44 @@ const (
 )
 
 func RegisterUser(user User) (sql.Result, error) {
-	return db.Exec("INSERT INTO users (username, first_name, last_name, email, phone_num, password, birth_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
+	return db.Exec("insert into users (username, first_name, last_name, email, phone_num, password, birth_date) values (?, ?, ?, ?, ?, ?, ?)",
 		user.Username, user.FirstName, user.LastName, user.Email, user.PhoneNum, user.Password, user.BirthDate)
 }
 
+func SelectUserPassword(username string) (string, error) {
+	row, err := db.Query("select password from users where username like ?", username)
+
+	if err != nil {
+		return "", err
+	}
+
+	if !row.Next() {
+		return "", NotFoundErr
+	}
+
+	var pass string
+
+	if err = row.Scan(&pass); err != nil {
+		return "", err
+	}
+
+	return pass, nil
+}
+
 func SelectUserByName(username string) (User, error) {
-	rows, err := db.Query("SELECT * FROM users WHERE username LIKE ?", username)
+	row, err := db.Query("select * from users where username like ?", username)
 
 	if err != nil {
 		return User{}, err
 	}
 
-	var user User
-
-	if !rows.Next() {
+	if !row.Next() {
 		return User{}, NotFoundErr
 	}
 
-	err = rows.Scan(&user.Username,
+	var user User
+
+	err = row.Scan(&user.Username,
 		&user.FirstName,
 		&user.LastName,
 		&user.Email,
@@ -146,27 +166,27 @@ func UpdateUser(newUser User) error {
 }
 
 func updateUserFirstName(username string, firstName string) (sql.Result, error) {
-	return db.Exec("UPDATE users SET first_name = ? WHERE username LIKE ?", firstName, username)
+	return db.Exec("update users set first_name = ? where username like ?", firstName, username)
 }
 
 func updateUserLastName(username string, lastName string) (sql.Result, error) {
-	return db.Exec("UPDATE users SET last_name = ? WHERE username LIKE ?", lastName, username)
+	return db.Exec("update users set last_name = ? where username like ?", lastName, username)
 }
 
 func updateUserEmail(username string, email string) (sql.Result, error) {
-	return db.Exec("UPDATE users SET email = ? WHERE username LIKE ?", email, username)
+	return db.Exec("update users set email = ? where username like ?", email, username)
 }
 
 func updateUserPhoneNum(username string, phoneNum string) (sql.Result, error) {
-	return db.Exec("UPDATE users SET phone_num = ? WHERE username LIKE ?", phoneNum, username)
+	return db.Exec("update users set phone_num = ? where username like ?", phoneNum, username)
 }
 
 func UpdateUserPassword(username string, password string) (sql.Result, error) {
-	return db.Exec("UPDATE users SET password = ? WHERE username LIKE ?", password, username)
+	return db.Exec("update users set password = ? where username like ?", password, username)
 }
 
 func SelectAllProducts() ([]Product, error) {
-	rows, err := db.Query("SELECT id, name, category, price, amount, description FROM products")
+	rows, err := db.Query("select id, name, category, price, amount, description from products")
 
 	if err != nil {
 		return nil, err
