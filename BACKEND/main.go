@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
-	"github.com/gin-gonic/contrib/cors"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -74,15 +74,18 @@ func main() {
 
 	// --- CORS ---
 	router.Use(cors.New(cors.Config{
-		AllowAllOrigins:  true,
-		AllowedMethods:   []string{"*"},
-		AllowedHeaders:   []string{"*"},
-		ExposedHeaders:   []string{"*"},
+		AllowOrigins:     []string{"http://localhost:4200", "http://localhost"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge:           24 * time.Hour,
+		MaxAge:           12 * time.Hour,
 	}))
-	// ---
 
+	// ---
+	router.OPTIONS("/*path", func(c *gin.Context) {
+		c.Status(http.StatusOK)
+	})
 	// --- Url groups ---
 	api := router.Group("/api")
 
