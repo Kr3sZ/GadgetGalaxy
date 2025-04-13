@@ -53,6 +53,7 @@ type (
 	}
 
 	Product struct {
+		Id          int64   `json:"id"`
 		Name        string  `json:"name"`
 		Category    string  `json:"category"`
 		Price       float64 `json:"price"`
@@ -165,7 +166,7 @@ func UpdateUserPassword(username string, password string) (sql.Result, error) {
 }
 
 func SelectAllProducts() ([]Product, error) {
-	rows, err := db.Query("SELECT name, category, price, amount, description FROM products")
+	rows, err := db.Query("SELECT id, name, category, price, amount, description FROM products")
 
 	if err != nil {
 		return nil, err
@@ -176,7 +177,8 @@ func SelectAllProducts() ([]Product, error) {
 	for rows.Next() {
 		var product Product
 
-		err = rows.Scan(&product.Name,
+		err = rows.Scan(&product.Id,
+			&product.Name,
 			&product.Category,
 			&product.Price,
 			&product.Amount,
@@ -225,7 +227,7 @@ func SearchProducts(keyword string, category string, sort Sort) ([]Product, erro
 		}
 
 		var rows *sql.Rows
-		rows, err = db.Query("select name, category, price, amount, description from products order by ?", order)
+		rows, err = db.Query("select id, name, category, price, amount, description from products order by ?", order)
 
 		if err != nil {
 			return nil, err
@@ -234,7 +236,8 @@ func SearchProducts(keyword string, category string, sort Sort) ([]Product, erro
 		for rows.Next() {
 			var product Product
 
-			err = rows.Scan(&product.Name,
+			err = rows.Scan(&product.Id,
+				&product.Name,
 				&product.Category,
 				&product.Price,
 				&product.Amount,
