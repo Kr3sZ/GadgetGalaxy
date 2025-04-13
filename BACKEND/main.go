@@ -122,6 +122,8 @@ func main() {
 
 	// --- Admin page handling ---
 	apiAdmin.POST("/login", admin.LoginHandler)
+
+	apiAdminAuth.GET("/logout", admin.LogoutHandler)
 	// ---
 
 	// --- Test endpoints ---

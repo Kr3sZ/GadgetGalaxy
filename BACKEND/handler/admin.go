@@ -80,3 +80,22 @@ func (h *AdminHandler) LoginHandler(c *gin.Context) {
 		"message": "success",
 	})
 }
+
+func (h *AdminHandler) LogoutHandler(c *gin.Context) {
+	session := sessions.Default(c)
+
+	session.Clear()
+
+	if err := session.Save(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "success",
+	})
+}
