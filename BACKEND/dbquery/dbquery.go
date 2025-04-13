@@ -150,6 +150,35 @@ func SelectUserByName(username string) (User, error) {
 	return user, nil
 }
 
+func SelectUserByToken(token string) (User, error) {
+	username, err := SelectUsernameFromToken(token)
+
+	if err != nil {
+		return User{}, err
+	}
+
+	return SelectUserByName(username)
+}
+
+func SelectUsernameFromToken(token string) (string, error) {
+	row, err := db.Query("select username from users where token like ?", token)
+
+	if err != nil {
+		return "", err
+	}
+
+	if !row.Next() {
+		return "", NotFoundErr
+	}
+
+	var username string
+
+	if err = row.Scan(&username); err != nil {
+		return "", err
+	}
+	return username, nil
+}
+
 func UpdateUser(newUser User) error {
 	username := newUser.Username
 	oldUser, err := SelectUserByName(username)
