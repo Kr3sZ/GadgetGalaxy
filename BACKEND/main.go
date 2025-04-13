@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"gadgetGalaxy/dbquery"
 	"gadgetGalaxy/handler"
@@ -65,7 +66,12 @@ func main() {
 
 	// --- CORS ---
 	router.Use(cors.New(cors.Config{
-		AllowAllOrigins: true,
+		AllowAllOrigins:  true,
+		AllowedMethods:   []string{"*"},
+		AllowedHeaders:   []string{"*"},
+		ExposedHeaders:   []string{"*"},
+		AllowCredentials: true,
+		MaxAge:           24 * time.Hour,
 	}))
 	// ---
 
@@ -76,7 +82,9 @@ func main() {
 	apiAuth.Use(middleware.Authentication)
 
 	apiAdmin := api.Group("/admin")
-	apiAdmin.Use(middleware.Authentication)
+
+	apiAdminAuth := apiAdmin.Group("/auth")
+	apiAdminAuth.Use(middleware.Authentication)
 	// ---
 
 	// --- Handler definitions ---
