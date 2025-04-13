@@ -64,13 +64,7 @@ func main() {
 	// ---
 
 	// --- CORS ---
-	router.Use(cors.New(cors.Config{
-		AllowedOrigins: []string{"http://localhost:4200", "http://localhost:80", "http://localhost"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
-		AllowedHeaders: []string{"Content-Type"},
-		ExposedHeaders: []string{"Content-Type", "Content-Length", "Content-Description", "Content-Transfer-Encoding",
-			"Content-Disposition"},
-	}))
+	router.Use(cors.Default())
 	// ---
 
 	// --- Url groups ---
