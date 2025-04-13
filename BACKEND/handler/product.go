@@ -1,8 +1,11 @@
 package handler
 
 import (
+	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 
 	"gadgetGalaxy/dbquery"
 )
@@ -70,6 +73,52 @@ func (h *ProductHandler) SearchProductHandler(c *gin.Context) {
 		"error":   false,
 		"message": products,
 	})
+}
+
+func (h *ProductHandler) ProductImageHandler(c *gin.Context) {
+	idStr, exists := c.Params.Get("id")
+
+	if !exists {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": "error: did not specify product id",
+		})
+		return
+	}
+
+	id, err := strconv.ParseInt(idStr, 10, 64)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	var img dbquery.ProductImage
+	img, err = dbquery.GetProductImage(id)
+
+	if err != nil {
+		status := http.StatusInternalServerError
+
+		if errors.Is(err, dbquery.NotFoundErr) {
+			status = http.StatusNotFound
+		}
+
+		c.JSON(status, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	fn := fmt.Sprintf("product_%d.png", id)
+
+	c.Header("Content-Description", "File Transfer")
+	c.Header("Content-Transfer-Encoding", "binary")
+	c.Header("Content-Disposition", fmt.Sprintf("inline; filename=%s", fn))
+	c.Data(http.StatusOK, "application/octet-stream", img)
 }
 
 func (h *ProductHandler) OrderHandler(c *gin.Context) {

@@ -59,12 +59,16 @@ func main() {
 	api := router.Group("/api")
 
 	apiAuth := api.Group("/auth")
-	apiAuth.Use(middleware.Authentication())
+	apiAuth.Use(middleware.Authentication)
+
+	apiAdmin := api.Group("/admin")
+	apiAdmin.Use(middleware.Authentication)
 	// ---
 
 	// --- Handler definitions ---
 	user := handler.NewUserHandler()
 	product := handler.NewProductHandler()
+	admin := handler.NewAdminHandler()
 	// ---
 
 	// --- Set trusted proxies
@@ -89,8 +93,13 @@ func main() {
 	// --- Product handling ---
 	api.GET("/products", product.AllProductsHandler)
 	api.POST("/searchProducts", product.SearchProductHandler)
+	api.GET("/productImage/:id", product.ProductImageHandler)
 
 	apiAuth.POST("/order", product.OrderHandler)
+	// ---
+
+	// --- Admin page handling
+	apiAdmin.POST("/login", admin.LoginHandler)
 	// ---
 
 	// --- Test endpoints ---
