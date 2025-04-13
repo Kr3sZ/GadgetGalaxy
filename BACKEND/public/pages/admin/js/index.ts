@@ -1,5 +1,10 @@
-function post(url: string, pBody: any): Promise<any> {
-	return new Promise((resolve: (value: any) => void, reject: (reason?: any) => void): void => {
+interface ApiResponse {
+	error: boolean
+	message: any
+}
+
+function post(url: string, pBody: any): Promise<ApiResponse> {
+	return new Promise((resolve: (value: ApiResponse) => void, reject: (reason?: any) => void): void => {
 		fetch(url, {
 			method: "POST",
 			headers: {
@@ -12,7 +17,7 @@ function post(url: string, pBody: any): Promise<any> {
 			}
 
 			return res.json()
-		}).then((data: any): void => {
+		}).then((data: ApiResponse): void => {
 			resolve(data)
 		}).catch((e: any): void => {
 			reject(e)
@@ -20,15 +25,15 @@ function post(url: string, pBody: any): Promise<any> {
 	})
 }
 
-function get(url: string): Promise<any> {
-	return new Promise((resolve: (value: any) => void, reject: (reason?: any) => void): void => {
+function get(url: string): Promise<ApiResponse> {
+	return new Promise((resolve: (value: ApiResponse) => void, reject: (reason?: any) => void): void => {
 		fetch(url).then((res: Response): any => {
 			if (!res.ok) {
 				reject(`error: invalid status: ${res.status}`)
 			}
 
 			return res.json()
-		}).then((data: any): void => {
+		}).then((data: ApiResponse): void => {
 			resolve(data)
 		}).catch((e: any): void => {
 			reject(e)

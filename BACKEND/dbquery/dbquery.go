@@ -60,6 +60,8 @@ type (
 		Description string  `json:"description"`
 	}
 
+	ProductImage []byte
+
 	OrderProduct struct {
 		Id       int64 `json:"id"`
 		Quantity int64 `json:"quantity"`
@@ -264,6 +266,26 @@ func SearchProducts(keyword string, category string, sort Sort) ([]Product, erro
 	}
 
 	return foundProd, nil
+}
+
+func GetProductImage(id int64) (ProductImage, error) {
+	row, err := db.Query("select image from products where id = ?", id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !row.Next() {
+		return nil, NotFoundErr
+	}
+
+	var img ProductImage
+
+	if err = row.Scan(&img); err != nil {
+		return nil, err
+	}
+
+	return img, nil
 }
 
 func AddOrder(username string, products []OrderProduct, address string) error {

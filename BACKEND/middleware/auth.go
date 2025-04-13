@@ -6,18 +6,16 @@ import (
 	"net/http"
 )
 
-func Authentication() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		session := sessions.Default(c)
-		sessionID := session.Get("id")
+func Authentication(c *gin.Context) {
+	session := sessions.Default(c)
+	sessionID := session.Get("id")
 
-		if sessionID == nil {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"error":   true,
-				"message": "unauthorized",
-			})
-			c.Abort()
-			return
-		}
+	if sessionID == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error":   true,
+			"message": "unauthorized",
+		})
+		c.Abort()
+		return
 	}
 }
