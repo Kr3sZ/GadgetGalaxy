@@ -17,6 +17,7 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./mariadb.cnf:/etc/mysql/conf.d/mariadb.cnf
 
   redis:
     image: redis:latest
