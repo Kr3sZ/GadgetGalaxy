@@ -1,40 +1,49 @@
 <div class="flex h-full w-full items-center justify-center bg-gray-100">
   <div class="max-h-full w-full max-w-md p-8 bg-white rounded-2xl shadow-lg overflow-auto">
     <h2 class="text-2xl font-semibold text-center text-gray-800">Register</h2>
-    <form class="mt-6 space-y-4">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-6 space-y-4">
       <div>
         <label class="block text-sm font-medium text-gray-700" for="username">Username</label>
-        <input id="username" name="username" type="text" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your username" required>
+        <input id="username" formControlName="username" type="text" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your username" required>
+        <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="text-red-500 text-sm">Username is required.</div>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700" for="firstname">First name</label>
-        <input id="firstname" name="firstname" type="text" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your first name" required>
+        <input id="firstname" formControlName="firstName" type="text" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your first name" required>
+        <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched" class="text-red-500 text-sm">First name is required.</div>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700" for="lastname">Last name</label>
-        <input id="lastname" name="lastname" type="text" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your last name" required>
+        <input id="lastname" formControlName="lastName" type="text" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your last name" required>
+        <div *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched" class="text-red-500 text-sm">Last name is required.</div>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700" for="email">Email</label>
-        <input id="email" name="email" type="email" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your email" required>
+        <input id="email" formControlName="email" type="email" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your email" required>
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-red-500 text-sm">Valid email is required.</div>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700" for="phone">Phone Number</label>
-        <input id="phone" name="phone" type="tel" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your phone number" required>
+        <input id="phone" formControlName="phoneNumber" type="tel" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your phone number" required>
+        <div *ngIf="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched" class="text-red-500 text-sm">Phone number is required.</div>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700" for="birthdate">Birthdate</label>
-        <input id="birthdate" name="birthDate" type="date" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" required>
+        <input id="birthdate" formControlName="birthdate" type="date" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" required>
+        <div *ngIf="registerForm.get('birthdate')?.invalid && registerForm.get('birthdate')?.touched" class="text-red-500 text-sm">Birthdate is required.</div>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700" for="password">Password</label>
-        <input id="password" name="password" type="password" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Create a password" required>
+        <input id="password" formControlName="password" type="password" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Create a password" required>
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-red-500 text-sm">Password is required.</div>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700" for="confirmPassword">Confirm Password</label>
-        <input id="confirmPassword" name="confirmPassword" type="password" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Confirm your password" required>
+        <input id="confirmPassword" formControlName="confirmPassword" type="password" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Confirm your password" required>
+        <div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" class="text-red-500 text-sm">Password confirmation is required.</div>
       </div>
-      <button class="w-full bg-purple-700 text-white py-2 rounded-lg font-medium">Register</button>
+      <button type="submit" [disabled]="isSubmitting" class="w-full bg-purple-700 text-white py-2 rounded-lg font-medium">Register</button>
+      <div *ngIf="error" class="text-red-500 text-sm mt-2">{{ error }}</div>
     </form>
     <p class="mt-4 text-center text-sm text-gray-600">
       Already have an account? <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" class="text-purple-600 hover:underline">Login</a>
