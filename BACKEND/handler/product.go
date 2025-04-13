@@ -97,7 +97,7 @@ func (h *ProductHandler) ProductImageHandler(c *gin.Context) {
 	}
 
 	var img []byte
-	img, err = dbquery.GetProductImage(id)
+	img, err = dbquery.SelectProductImage(id)
 
 	if err != nil {
 		status := http.StatusInternalServerError

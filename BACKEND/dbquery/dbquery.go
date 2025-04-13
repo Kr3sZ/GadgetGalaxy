@@ -269,7 +269,7 @@ func SearchProducts(keyword string, category string, sort Sort) ([]Product, erro
 	return foundProd, nil
 }
 
-func GetProductImage(id int64) ([]byte, error) {
+func SelectProductImage(id int64) ([]byte, error) {
 	row, err := db.Query("select image from products where id = ?", id)
 
 	if err != nil {
@@ -348,4 +348,24 @@ func AddOrder(username string, products []OrderProduct, address string) error {
 	}
 
 	return nil
+}
+
+func SelectAdminPassword(username string) (string, error) {
+	row, err := db.Query("select password from admin where username like ?", username)
+
+	if err != nil {
+		return "", err
+	}
+
+	if !row.Next() {
+		return "", NotFoundErr
+	}
+
+	var pass string
+
+	if err = row.Scan(&pass); err != nil {
+		return "", err
+	}
+
+	return pass, nil
 }
