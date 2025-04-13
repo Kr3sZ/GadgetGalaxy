@@ -2,9 +2,11 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 
 	"gadgetGalaxy/dbquery"
 	"gadgetGalaxy/utils"
@@ -49,7 +51,10 @@ func (h *UserHandler) RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	if _, err := dbquery.RegisterUser(user); err != nil {
+	unixTime := time.Now().Unix()
+	hash, err := utils.Hash(fmt.Sprintf("%s_%d", user.Username, unixTime))
+
+	if _, err = dbquery.RegisterUser(user, string(hash)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   true,
 			"message": err.Error(),
@@ -101,7 +106,7 @@ func (h *UserHandler) LoginHandler(c *gin.Context) {
 	}
 
 	session := sessions.Default(c)
-	hash, err := utils.Hash(loginReq.Username)
+	token, err := dbquery.SelectUserToken(loginReq.Username)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -111,7 +116,7 @@ func (h *UserHandler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	session.Set("id", string(hash))
+	session.Set("id", token)
 
 	if err = session.Save(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

@@ -77,9 +77,9 @@ const (
 	NameDesc
 )
 
-func RegisterUser(user User) (sql.Result, error) {
-	return db.Exec("insert into users (username, first_name, last_name, email, phone_num, password, birth_date) values (?, ?, ?, ?, ?, ?, ?)",
-		user.Username, user.FirstName, user.LastName, user.Email, user.PhoneNum, user.Password, user.BirthDate)
+func RegisterUser(user User, token string) (sql.Result, error) {
+	return db.Exec("insert into users (username, first_name, last_name, email, phone_num, password, birth_date, token) values (?, ?, ?, ?, ?, ?, ?, ?)",
+		user.Username, user.FirstName, user.LastName, user.Email, user.PhoneNum, user.Password, user.BirthDate, token)
 }
 
 func SelectUserPassword(username string) (string, error) {
@@ -100,6 +100,26 @@ func SelectUserPassword(username string) (string, error) {
 	}
 
 	return pass, nil
+}
+
+func SelectUserToken(username string) (string, error) {
+	row, err := db.Query("select token from users where username like ?", username)
+
+	if err != nil {
+		return "", err
+	}
+
+	if !row.Next() {
+		return "", NotFoundErr
+	}
+
+	var token string
+
+	if err = row.Scan(&token); err != nil {
+		return "", err
+	}
+
+	return token, err
 }
 
 func SelectUserByName(username string) (User, error) {
