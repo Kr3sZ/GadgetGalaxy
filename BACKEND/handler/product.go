@@ -117,7 +117,7 @@ func (h *ProductHandler) ProductImageHandler(c *gin.Context) {
 
 	c.Header("Content-Description", "File Transfer")
 	c.Header("Content-Transfer-Encoding", "binary")
-	c.Header("Content-Disposition", fmt.Sprintf("inline; filename=%s", fn))
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", fn))
 	c.Data(http.StatusOK, "application/octet-stream", img)
 }
 
