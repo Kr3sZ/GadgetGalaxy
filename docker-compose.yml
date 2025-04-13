@@ -3,9 +3,9 @@ name: GadgetGalaxy
 
 services:
 
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
+  mariadb:
+    image: mariadb:10.4.28  
+    container_name: mariadb
     ports:
       - "3306:3306"  # Expose MySQL to host
     restart: unless-stopped
@@ -15,7 +15,8 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
   redis:
     image: redis:latest
@@ -48,4 +49,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  mysql_data:
+  mariadb_data:
