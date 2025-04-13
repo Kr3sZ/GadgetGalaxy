@@ -46,8 +46,13 @@ func main() {
 	// gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
-	store, err := redis.NewStore(10, "tcp", os.Getenv("REDIS_ADDR"), os.Getenv("REDIS_USER"),
-		os.Getenv("REDIS_PASS"), []byte(os.Getenv("REDIS_AUTH")))
+
+	redisUser := os.Getenv("REDIS_USER")
+	redisPass := os.Getenv("REDIS_PASS")
+	redisAddr := os.Getenv("REDIS_ADDR")
+	redisAuth := os.Getenv("REDIS_AUTH")
+
+	store, err := redis.NewStore(10, "tcp", redisAddr, redisUser, redisPass, []byte(redisAuth))
 
 	if err != nil {
 		log.Fatalf("error: %s\n", err.Error())
@@ -98,7 +103,7 @@ func main() {
 	apiAuth.POST("/order", product.OrderHandler)
 	// ---
 
-	// --- Admin page handling
+	// --- Admin page handling ---
 	apiAdmin.POST("/login", admin.LoginHandler)
 	// ---
 
