@@ -19,6 +19,7 @@ import (
 )
 
 func main() {
+	// --- Try loading env values from file ---
 	fmt.Println("\n-----------------")
 	fmt.Println("Loading .env variables...")
 
@@ -26,13 +27,16 @@ func main() {
 		fmt.Println("Unable to find .env file in go project root, using system environment values.")
 	}
 
+	//goland:noinspection GoPrintFunctions
+	fmt.Println("Loading successful!\n")
+	// ---
+
+	// --- Connect to MariaDB ---
 	dbUser := os.Getenv("DB_USER")
 	dbPass := os.Getenv("DB_PASS")
 	dbAddr := os.Getenv("DB_ADDR")
 	dbName := os.Getenv("DB_NAME")
 
-	//goland:noinspection GoPrintFunctions
-	fmt.Println("Loading successful!\n")
 	fmt.Println("Connecting to database...")
 
 	err := dbquery.ConnectToDb(dbUser, dbPass, dbAddr, dbName)
@@ -43,11 +47,15 @@ func main() {
 
 	//goland:noinspection GoPrintFunctions
 	fmt.Println("Connection successful!\n")
+	// ---
+
+	// --- Setup rest API with default config ---
 	fmt.Println("Starting REST API server...")
 
 	// gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
+	// ---
 
 	// --- Session management ---
 	redisUser := os.Getenv("REDIS_USER")
