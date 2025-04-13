@@ -64,7 +64,9 @@ func main() {
 	// ---
 
 	// --- CORS ---
-	router.Use(cors.Default())
+	router.Use(cors.New(cors.Config{
+		AllowAllOrigins: true,
+	}))
 	// ---
 
 	// --- Url groups ---
