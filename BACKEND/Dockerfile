@@ -16,7 +16,6 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=builder /app/server .
-# optional: only if godotenv is used
 
 EXPOSE 8080
 
