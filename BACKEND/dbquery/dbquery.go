@@ -167,7 +167,7 @@ func UpdateUserPassword(username string, password string) (sql.Result, error) {
 }
 
 func SelectAllProducts() ([]Product, error) {
-	rows, err := db.Query("SELECT * FROM products")
+	rows, err := db.Query("SELECT name, category, price, amount, description FROM products")
 
 	if err != nil {
 		return nil, err
@@ -227,7 +227,7 @@ func SearchProducts(keyword string, category string, sort Sort) ([]Product, erro
 		}
 
 		var rows *sql.Rows
-		rows, err = db.Query("select * from products order by ?", order)
+		rows, err = db.Query("select name, category, price, amount, description from products order by ?", order)
 
 		if err != nil {
 			return nil, err
