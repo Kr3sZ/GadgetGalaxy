@@ -4,19 +4,18 @@
 
 # MySQL
 MYSQL_ROOT_PASSWORD=""
-MYSQL_DATABASE=""
+MYSQL_DATABASE=""              # gadget_galaxy
 MYSQL_USER=""
 MYSQL_PASSWORD=""
 
 # Backend
 DB_USER=""
 DB_PASS=""
-DB_ADDR=""
-DB_NAME=""
+DB_ADDR=""                     # mysql:port
+DB_NAME=""                     # gadget_galaxy
 
 # Redis
-
-REDIS_ADDR=""
-REDIS_USER=""
-REDIS_PASS=""
-REDIS_AUTH=""
+REDIS_ADDR=""                  # redis:port
+REDIS_USER=""                  # optional, can be empty by default 
+REDIS_PASS=""                  # optional, can be empty by default
+REDIS_AUTH=""                  # variable, its for the purpose of viewing the stored session
