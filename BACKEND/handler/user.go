@@ -22,7 +22,6 @@ type (
 	}
 
 	updateUserRequest struct {
-		Username  string `json:"username"`
 		FirstName string `json:"firstName"`
 		LastName  string `json:"lastName"`
 		Email     string `json:"email"`
@@ -54,7 +53,7 @@ func (h *UserHandler) RegisterHandler(c *gin.Context) {
 	unixTime := time.Now().Unix()
 	hash, err := utils.Hash(fmt.Sprintf("%s_%d", user.Username, unixTime))
 
-	if _, err = dbquery.RegisterUser(user, string(hash)); err != nil {
+	if _, err = dbquery.RegisterUser(user, hash); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   true,
 			"message": err.Error(),
@@ -162,7 +161,9 @@ func (h *UserHandler) UpdateHandler(c *gin.Context) {
 		return
 	}
 
-	user, err := dbquery.SelectUserByName(updateUserReq.Username)
+	session := sessions.Default(c)
+	token := session.Get("id")
+	user, err := dbquery.SelectUserByToken(fmt.Sprint(token))
 
 	if err != nil {
 		if errors.Is(err, dbquery.NotFoundErr) {

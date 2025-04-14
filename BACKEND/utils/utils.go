@@ -2,12 +2,11 @@ package utils
 
 import (
 	"crypto/sha256"
+	"fmt"
 )
 
-func Hash(str string) ([]byte, error) {
+func Hash(str string) (string, error) {
 	h := sha256.New()
-
 	h.Write([]byte(str))
-
-	return h.Sum(nil), nil
+	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }

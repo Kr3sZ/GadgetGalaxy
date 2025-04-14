@@ -16,6 +16,7 @@ import (
 	"gadgetGalaxy/dbquery"
 	"gadgetGalaxy/handler"
 	"gadgetGalaxy/middleware"
+	"gadgetGalaxy/utils"
 )
 
 func main() {
@@ -82,10 +83,11 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	// ---
 	router.OPTIONS("/*path", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
+	// ---
+
 	// --- Url groups ---
 	api := router.Group("/api")
 
@@ -139,11 +141,11 @@ func main() {
 
 	// --- Test endpoints ---
 	apiAuth.GET("/hello", func(c *gin.Context) {
-		session := sessions.Default(c)
+		hash, _ := utils.Hash("test")
 
 		c.JSON(http.StatusOK, gin.H{
 			"error":   false,
-			"message": session.Get("id"),
+			"message": string(hash),
 		})
 	})
 	// ---
