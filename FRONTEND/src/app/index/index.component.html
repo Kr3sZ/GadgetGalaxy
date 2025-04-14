@@ -58,7 +58,7 @@
   <div class="p-6 max-w-5xl mx-auto flex justify-between items-center space-x-4">
     <div *ngIf="categoriesIsLoading">Loading categories...</div>
     <div *ngIf="categoriesError">{{ categoriesError }}</div>
-    <input (change)="searchProduct()" [(ngModel)]="searchInput" type="text" placeholder="Search for products..." class="w-2/4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+    <input (input)="searchProduct()" [(ngModel)]="searchInput" type="text" placeholder="Search for products..." class="w-2/4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
     <select (change)="searchProduct()" [(ngModel)]="searchCategory" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
       <option value="">Category</option>
       <option *ngFor="let category of categoriesList" [value]="category">{{category}}</option>

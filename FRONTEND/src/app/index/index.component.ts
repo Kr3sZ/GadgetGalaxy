@@ -76,7 +76,22 @@ export class IndexComponent implements OnInit {
   }
 
   sortProducts(): void {
-
+    if (this.searchSort) {
+      switch (this.searchSort) {
+        case "0": // Price: Low to High
+          this.productsList.sort((a, b) => a.price - b.price);
+          break;
+        case "1": // Price: High to Low
+          this.productsList.sort((a, b) => b.price - a.price);
+          break;
+        case "2": // Name: A to Z
+          this.productsList.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case "3": // Name: Z to A
+          this.productsList.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+      }
+    }
   }
 
 
