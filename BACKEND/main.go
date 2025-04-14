@@ -129,7 +129,7 @@ func main() {
 
 	apiAuth.GET("/getCart", product.UserCartHandler)
 	apiAuth.POST("/addToCart", product.AddToCartHandler)
-	apiAuth.POST("/modifyInCart")
+	apiAuth.POST("/modifyInCart", product.ModifyAmountInCartHandler)
 	apiAuth.POST("/removeFromCart", product.RemoveFromCartHandler)
 	apiAuth.POST("/order", product.OrderHandler)
 	// ---

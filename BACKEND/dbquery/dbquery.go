@@ -393,6 +393,19 @@ func AddToCart(username string, productId int64) error {
 	return err
 }
 
+func ModifyAmountInCart(username string, productId int64, amount int64) error {
+	cartId, err := selectUserCartId(username)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec("update cart_products set amount = ? where cart_id = ? and prod_id = ?",
+		amount, cartId, productId)
+
+	return err
+}
+
 func RemoveFromCart(username string, productId int64) error {
 	cartId, err := selectUserCartId(username)
 
