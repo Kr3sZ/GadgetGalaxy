@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgIf } from '@angular/common';
@@ -10,7 +10,7 @@ import * as CryptoJS from 'crypto-js';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, ReactiveFormsModule, HttpClientModule, NgIf],
+  imports: [RouterLink, RouterLinkActive, ReactiveFormsModule, HttpClientModule, NgIf],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
@@ -39,7 +39,6 @@ export class RegisterComponent {
 
     const formValue = this.registerForm.value;
 
-    // Check if password and confirmPassword match
     if (formValue.password !== formValue.confirmPassword) {
       this.registerError = 'Passwords do not match.';
       return;
@@ -47,9 +46,8 @@ export class RegisterComponent {
 
     this.registerIsSubmitting = true;
 
-    // Hash the password field
     formValue.password = CryptoJS.SHA256(formValue.password).toString();
-    delete formValue.confirmPassword; // Remove confirmPassword before sending to the server
+    delete formValue.confirmPassword;
 
     const user: UserData = formValue;
 
@@ -63,6 +61,34 @@ export class RegisterComponent {
         console.error('Registration failed:', err);
         this.registerError = 'Registration failed. Please try again.';
         this.registerIsSubmitting = false;
+      },
+    });
+  }
+
+  // USER DATA
+
+  ngOnInit(): void {
+    this.fetchUser();
+  }
+
+  userDataUser: UserData | null = null;
+  userDataIsLoading = false;
+  userDataError: string | null = null;
+
+  fetchUser(): void {
+    this.userService.getUserData().subscribe({
+      next: (res) => {
+        if (!res.error) {
+          this.userDataUser = res.message;
+          this.router.navigate(['/']);
+        } else {
+          this.userDataError = 'Something went wrong!';
+        }
+        this.userDataIsLoading = false;
+      },
+      error: () => {
+        this.userDataError = 'Failed to load user data.';
+        this.userDataIsLoading = false;
       },
     });
   }
