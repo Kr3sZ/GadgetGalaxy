@@ -65,16 +65,6 @@ type (
 		Id       int64 `json:"id"`
 		Quantity int64 `json:"quantity"`
 	}
-
-	Sort int64
-)
-
-const (
-	None Sort = iota
-	PriceAsc
-	PriceDesc
-	NameAsc
-	NameDesc
 )
 
 func RegisterUser(user User, token string) (sql.Result, error) {
@@ -263,61 +253,11 @@ func SelectAllProducts() ([]Product, error) {
 	return products, nil
 }
 
-func SearchProducts(keyword string, category string, sort Sort) ([]Product, error) {
-	var products []Product
-	var err error
+func SearchProducts(keyword string, category string) ([]Product, error) {
+	products, err := SelectAllProducts()
 
-	if sort == None {
-		if products, err = SelectAllProducts(); err != nil {
-			return nil, err
-		}
-	} else {
-		var order string
-
-		switch sort {
-		case PriceAsc:
-			order = "price ASC"
-			break
-
-		case PriceDesc:
-			order = "price DESC"
-			break
-
-		case NameAsc:
-			order = "name ASC"
-			break
-
-		case NameDesc:
-			order = "name DESC"
-			break
-
-		default:
-			return nil, UnexpectedErr
-		}
-
-		var rows *sql.Rows
-		rows, err = db.Query("select id, name, category, price, amount, description from products order by ?", order)
-
-		if err != nil {
-			return nil, err
-		}
-
-		for rows.Next() {
-			var product Product
-
-			err = rows.Scan(&product.Id,
-				&product.Name,
-				&product.Category,
-				&product.Price,
-				&product.Amount,
-				&product.Description)
-
-			if err != nil {
-				return nil, err
-			}
-
-			products = append(products, product)
-		}
+	if err != nil {
+		return nil, err
 	}
 
 	var foundProd []Product

@@ -16,9 +16,9 @@ type (
 	}
 
 	searchRequest struct {
-		Keyword  string       `json:"keyword"`
-		Category string       `json:"category"`
-		Sort     dbquery.Sort `json:"sort"`
+		Keyword  string `json:"keyword"`
+		Category string `json:"category"`
+		Sort     int64  `json:"sort"`
 	}
 
 	orderRequest struct {
@@ -59,7 +59,7 @@ func (h *ProductHandler) SearchProductHandler(c *gin.Context) {
 		return
 	}
 
-	products, err := dbquery.SearchProducts(search.Keyword, search.Category, search.Sort)
+	products, err := dbquery.SearchProducts(search.Keyword, search.Category)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
