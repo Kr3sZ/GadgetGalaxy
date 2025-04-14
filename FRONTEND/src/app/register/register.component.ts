@@ -31,6 +31,7 @@ export class RegisterComponent {
       birthdate: ['', Validators.required],
     });
   }
+  successMessage: string | null = null;
 
   onSubmit(): void {
     if (this.registerForm.invalid) {
@@ -53,12 +54,14 @@ export class RegisterComponent {
 
     this.userService.registerUser(user).subscribe({
       next: (response) => {
-        console.log('Registration successful:', response);
+        this.successMessage = 'Registration successful!';
         this.registerIsSubmitting = false;
-        this.router.navigate(['/login']);
+        setTimeout(() => {
+          this.successMessage = null;
+          this.router.navigate(['/login']);
+        }, 1000); // Hide the message after 3 seconds
       },
       error: (err) => {
-        console.error('Registration failed:', err);
         this.registerError = 'Registration failed. Please try again.';
         this.registerIsSubmitting = false;
       },

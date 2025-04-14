@@ -42,4 +42,10 @@
       <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page" class="text-blue-600 hover:underline">Back to home</a>
     </p>
   </div>
+  <div *ngIf="successMessage" class="fixed bottom-4 right-4 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="loginError" class="fixed bottom-4 right-4 bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg">
+    {{ loginError }}
+  </div>
 </div>

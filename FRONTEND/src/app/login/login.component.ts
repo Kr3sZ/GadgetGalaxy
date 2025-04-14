@@ -25,6 +25,7 @@ export class LoginComponent {
       password: ['', Validators.required],
     });
   }
+  successMessage: string | null = null;
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
@@ -42,18 +43,19 @@ export class LoginComponent {
 
     this.userService.loginUser(user).subscribe({
       next: (response) => {
-        console.log('Login successful:', response);
+        this.successMessage = 'Login successful!';
         this.loginIsSubmitting = false;
-        this.router.navigate(['/']); // Redirect to home or another page
+        setTimeout(() => {
+          this.successMessage = null;
+          this.router.navigate(['/']); // Redirect to home or another page
+        }, 1000); // Hide the message after 3 seconds
       },
       error: (err) => {
-        console.error('Login failed:', err);
         this.loginError = 'Login failed. Please check your credentials.';
         this.loginIsSubmitting = false;
       },
     });
   }
-
   // USER DATA
 
   ngOnInit(): void {
