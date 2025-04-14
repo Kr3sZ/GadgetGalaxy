@@ -60,4 +60,13 @@ export class UserService {
         withCredentials: true
       });
   }
+  adminLogin(admin: { username: string; password: string }): Observable<any> {
+    return this.http.post<any>(
+      this.baseUrl + "admin/login",
+      admin,
+      {
+        withCredentials: true
+      }
+    );
+  }
 }
