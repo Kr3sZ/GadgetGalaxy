@@ -53,7 +53,7 @@ type (
 	}
 
 	Product struct {
-		Id          int64   `json:"id"`
+		Id          *int64  `json:"id,omitempty"`
 		Name        string  `json:"name"`
 		Category    string  `json:"category"`
 		Price       float64 `json:"price"`
@@ -457,4 +457,15 @@ func SelectAdminToken(username string) (string, error) {
 	}
 
 	return token, nil
+}
+
+func AddProduct(product Product, img []byte) error {
+	_, err := db.Exec("insert into products (name, category, price, amount, description, image) values (?, ?, ?, ?, ?, ?)",
+		product.Name, product.Category, product.Price, product.Amount, product.Description, img)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

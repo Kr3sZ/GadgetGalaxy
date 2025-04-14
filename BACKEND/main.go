@@ -133,6 +133,7 @@ func main() {
 	apiAdmin.POST("/login", admin.LoginHandler)
 
 	apiAdminAuth.GET("/logout", admin.LogoutHandler)
+	apiAdminAuth.POST("/addProduct", admin.NewProductHandler)
 	// ---
 
 	// --- Test endpoints ---

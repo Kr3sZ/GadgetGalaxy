@@ -1,9 +1,11 @@
 package handler
 
 import (
+	json2 "encoding/json"
 	"errors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"mime/multipart"
 	"net/http"
 
 	"gadgetGalaxy/dbquery"
@@ -86,6 +88,56 @@ func (h *AdminHandler) LogoutHandler(c *gin.Context) {
 	session.Clear()
 
 	if err := session.Save(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "success",
+	})
+}
+
+func (h *AdminHandler) NewProductHandler(c *gin.Context) {
+	file, header, err := c.Request.FormFile("file")
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	defer func(file multipart.File) {
+		_ = file.Close()
+	}(file)
+
+	img := make([]byte, header.Size)
+
+	if _, err = file.Read(img); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	json := c.PostForm("json")
+	var product dbquery.Product
+
+	if err = json2.Unmarshal([]byte(json), &product); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err = dbquery.AddProduct(product, img); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   true,
 			"message": err.Error(),

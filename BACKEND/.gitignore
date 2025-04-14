@@ -3,3 +3,4 @@ archive
 **/*.http
 **/*.env
 **/.env
+**/*.png
