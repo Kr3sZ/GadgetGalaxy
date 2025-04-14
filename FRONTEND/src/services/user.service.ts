@@ -19,7 +19,7 @@ export class UserService {
       this.baseUrl + "login",
       user,
       {
-        withCredentials: true // 🔥 This is the key line
+        withCredentials: true
       }
     );
   }
@@ -28,6 +28,15 @@ export class UserService {
   }
 
   getUserData(): Observable<UserDataResponse> {
-    return this.http.get<UserDataResponse>(this.baseUrl+"auth/userData");
+    return this.http.get<UserDataResponse>(this.baseUrl+"auth/userData",
+      {
+        withCredentials: true
+      });
+  }
+  logoutUser() {
+    return this.http.get<any>(this.baseUrl+"auth/logout",
+      {
+        withCredentials: true
+      });
   }
 }

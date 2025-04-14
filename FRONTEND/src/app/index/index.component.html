@@ -16,18 +16,37 @@
         </button>
 
         <div *ngIf="accountDropdown" class="absolute right-0 mt-2 w-64 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-          <div class="flex p-4 justify-around items-center">
-            <h2>You are not logged in!</h2>
+          <div *ngIf="!userDataUser">
+            <div class="flex p-4 justify-around items-center">
+              <h2>You are not logged in!</h2>
+            </div>
+            <div class="flex p-4 justify-between items-center">
+              <a href="/login" class="">
+                <fa-icon [icon]="faSignInAlt" class="px-1"></fa-icon>
+                Login
+              </a>
+              <a href="/register" class="">
+                <fa-icon [icon]="faUserPlus" class="px-1"></fa-icon>
+                Register
+              </a>
+            </div>
           </div>
-          <div class="flex p-4 justify-between items-center">
-            <a href="/login" class="">
-              <fa-icon [icon]="faSignInAlt" class="px-1"></fa-icon>
-              Login
-            </a>
-            <a href="/register" class="">
-              <fa-icon [icon]="faUserPlus" class="px-1"></fa-icon>
-              Register
-            </a>
+          <div *ngIf="userDataUser">
+            <div class="flex p-4 justify-around items-center">
+              <h2>Welcome <b>{{userDataUser.username}}!</b></h2>
+            </div>
+            <div class="flex justify-around items-center">
+              <a href="/profile" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                <fa-icon [icon]="faHome" class="px-1"></fa-icon>
+                Profile
+              </a>
+            </div>
+            <div class="flex p-4 justify-around items-center">
+              <button (click)="logoutUser()">
+                <fa-icon [icon]="faSignInAlt" class="px-1"></fa-icon>
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </div>
