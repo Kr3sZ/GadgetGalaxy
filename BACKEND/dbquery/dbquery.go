@@ -328,6 +328,11 @@ func SelectAllCategories() ([]string, error) {
 	return categories, nil
 }
 
+func CreateUserCart(username string) error {
+	_, err := db.Exec("insert into carts (username) value (?)", username)
+	return err
+}
+
 func SelectUserCart(username string) ([]CartProduct, error) {
 	rows, err := db.Query("select prod_id, name, price, cart_products.amount from carts inner join cart_products on carts.id = cart_products.cart_id  inner join products on cart_products.prod_id = products.id where username like ?",
 		username)
