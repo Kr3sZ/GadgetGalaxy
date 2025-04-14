@@ -265,6 +265,8 @@ func (h *UserHandler) UserDataHandler(c *gin.Context) {
 		return
 	}
 
+	user.Password = ""
+
 	c.JSON(http.StatusOK, gin.H{
 		"error":   false,
 		"message": user,
