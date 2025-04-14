@@ -70,7 +70,7 @@ func (h *AdminHandler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	session.Set("id", token)
+	session.Set("admin-id", token)
 
 	if err = session.Save(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
