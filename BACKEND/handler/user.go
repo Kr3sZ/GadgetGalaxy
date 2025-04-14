@@ -220,7 +220,7 @@ func (h *UserHandler) NewPassHandler(c *gin.Context) {
 
 	session := sessions.Default(c)
 	token := session.Get("id")
-	user, err := dbquery.SelectUserByName(fmt.Sprint(token))
+	user, err := dbquery.SelectUserByToken(fmt.Sprint(token))
 
 	if err != nil {
 		if errors.Is(err, dbquery.NotFoundErr) {
