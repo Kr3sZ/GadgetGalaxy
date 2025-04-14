@@ -19,3 +19,17 @@ func Authentication(c *gin.Context) {
 		return
 	}
 }
+
+func AdminAuthentication(c *gin.Context) {
+	session := sessions.Default(c)
+	sessionID := session.Get("admin-id")
+
+	if sessionID == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error":   true,
+			"message": "unauthorized",
+		})
+		c.Abort()
+		return
+	}
+}
