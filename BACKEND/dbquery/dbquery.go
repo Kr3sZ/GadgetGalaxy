@@ -123,7 +123,7 @@ func SelectUserToken(username string) (string, error) {
 }
 
 func SelectUserByName(username string) (User, error) {
-	row, err := db.Query("select * from users where username like ?", username)
+	row, err := db.Query("select username, first_name, last_name, email, phone_num, password, birth_date from users where username like ?", username)
 
 	if err != nil {
 		return User{}, err
