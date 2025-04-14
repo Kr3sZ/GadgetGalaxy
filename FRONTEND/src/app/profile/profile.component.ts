@@ -15,7 +15,6 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 })
 export class ProfileComponent implements OnInit{
 
-
   constructor(
     private userService: UserService,
     private router: Router,
@@ -49,6 +48,9 @@ export class ProfileComponent implements OnInit{
     });
   }
 
+
+
+  // LOGOUT
   logoutUser() {
     this.userService.logoutUser().subscribe({
 
