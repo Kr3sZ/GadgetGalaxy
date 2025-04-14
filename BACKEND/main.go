@@ -128,6 +128,8 @@ func main() {
 	api.GET("/categories", product.AllCategoriesHandler)
 
 	apiAuth.GET("/getCart", product.UserCartHandler)
+	apiAuth.POST("/addToCart", product.AddToCartHandler)
+	apiAuth.POST("/deleteFromCart")
 	apiAuth.POST("/order", product.OrderHandler)
 	// ---
 

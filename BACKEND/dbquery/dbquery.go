@@ -356,6 +356,32 @@ func SelectUserCart(username string) ([]CartProduct, error) {
 	return products, nil
 }
 
+func AddToCart(username string, productId int64) error {
+	row, err := db.Query("select id from carts where username like ?", username)
+
+	if err != nil {
+		return err
+	}
+
+	if !row.Next() {
+		return NotFoundErr
+	}
+
+	var cartId int64
+
+	if err = row.Scan(&cartId); err != nil {
+		return err
+	}
+
+	_, err = db.Exec("insert into cart_products (cart_id, prod_id, amount) values (?, ?, 1)", cartId, productId)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func AddOrder(username string, products []OrderProduct, address string) error {
 	row, err := db.Query("select * from users where username = ?", username)
 

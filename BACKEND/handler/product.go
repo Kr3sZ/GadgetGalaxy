@@ -21,6 +21,10 @@ type (
 		Sort     int64  `json:"sort"`
 	}
 
+	modifyCartRequest struct {
+		ProductId int64 `json:"productId"`
+	}
+
 	orderRequest struct {
 		Products []dbquery.OrderProduct `json:"products"`
 		Address  string                 `json:"address"`
@@ -164,6 +168,43 @@ func (h *ProductHandler) UserCartHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"error":   false,
 		"message": products,
+	})
+}
+
+func (h *ProductHandler) AddToCartHandler(c *gin.Context) {
+	var modifyCartReq modifyCartRequest
+
+	if err := c.ShouldBindJSON(&modifyCartReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	session := sessions.Default(c)
+	token := session.Get("id")
+	user, err := dbquery.SelectUserByToken(fmt.Sprint(token))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err = dbquery.AddToCart(user.Username, modifyCartReq.ProductId); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "success",
 	})
 }
 
