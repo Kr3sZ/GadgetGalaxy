@@ -138,6 +138,7 @@ func main() {
 	apiAdmin.POST("/login", admin.LoginHandler)
 
 	apiAdminAuth.GET("/logout", admin.LogoutHandler)
+	apiAdminAuth.GET("/isLoggedIn", admin.IsLoggedInHandler)
 	apiAdminAuth.POST("/addProduct", admin.NewProductHandler)
 	apiAdminAuth.DELETE("/removeProduct", admin.RemoveProductHandler)
 	// ---

@@ -105,6 +105,13 @@ func (h *AdminHandler) LogoutHandler(c *gin.Context) {
 	})
 }
 
+func (h *AdminHandler) IsLoggedInHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "success",
+	})
+}
+
 func (h *AdminHandler) NewProductHandler(c *gin.Context) {
 	file, header, err := c.Request.FormFile("file")
 
