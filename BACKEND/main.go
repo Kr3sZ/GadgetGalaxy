@@ -96,7 +96,7 @@ func main() {
 	apiAdmin := api.Group("/admin")
 
 	apiAdminAuth := apiAdmin.Group("/auth")
-	apiAdminAuth.Use(middleware.Authentication)
+	apiAdminAuth.Use(middleware.AdminAuthentication)
 	// ---
 
 	// --- Handler definitions ---
@@ -129,7 +129,8 @@ func main() {
 
 	apiAuth.GET("/getCart", product.UserCartHandler)
 	apiAuth.POST("/addToCart", product.AddToCartHandler)
-	apiAuth.POST("/deleteFromCart")
+	apiAuth.POST("/modifyInCart", product.ModifyAmountInCartHandler)
+	apiAuth.POST("/removeFromCart", product.RemoveFromCartHandler)
 	apiAuth.POST("/order", product.OrderHandler)
 	// ---
 

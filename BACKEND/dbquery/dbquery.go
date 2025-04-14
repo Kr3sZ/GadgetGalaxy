@@ -328,6 +328,11 @@ func SelectAllCategories() ([]string, error) {
 	return categories, nil
 }
 
+func CreateUserCart(username string) error {
+	_, err := db.Exec("insert into carts (username) value (?)", username)
+	return err
+}
+
 func SelectUserCart(username string) ([]CartProduct, error) {
 	rows, err := db.Query("select prod_id, name, price, cart_products.amount from carts inner join cart_products on carts.id = cart_products.cart_id  inner join products on cart_products.prod_id = products.id where username like ?",
 		username)
@@ -356,30 +361,71 @@ func SelectUserCart(username string) ([]CartProduct, error) {
 	return products, nil
 }
 
-func AddToCart(username string, productId int64) error {
+func selectUserCartId(username string) (int64, error) {
 	row, err := db.Query("select id from carts where username like ?", username)
+
+	if err != nil {
+		return 0, err
+	}
+
+	if !row.Next() {
+		return 0, NotFoundErr
+	}
+
+	var cartId int64
+
+	if err = row.Scan(&cartId); err != nil {
+		return 0, err
+	}
+
+	return cartId, nil
+}
+
+func AddToCart(username string, productId int64) error {
+	cartId, err := selectUserCartId(username)
+
+	if err != nil {
+		return err
+	}
+
+	row, err := db.Query("select * from cart_products where cart_id = ? and prod_id = ?", cartId, productId)
 
 	if err != nil {
 		return err
 	}
 
 	if !row.Next() {
-		return NotFoundErr
+		_, err = db.Exec("insert into cart_products (cart_id, prod_id, amount) values (?, ?, 1)", cartId, productId)
+	} else {
+		_, err = db.Exec("update cart_products set amount = amount + 1 where cart_id = ? and prod_id = ?", cartId, productId)
 	}
 
-	var cartId int64
+	return err
+}
 
-	if err = row.Scan(&cartId); err != nil {
-		return err
-	}
-
-	_, err = db.Exec("insert into cart_products (cart_id, prod_id, amount) values (?, ?, 1)", cartId, productId)
+func ModifyAmountInCart(username string, productId int64, amount int64) error {
+	cartId, err := selectUserCartId(username)
 
 	if err != nil {
 		return err
 	}
 
-	return nil
+	_, err = db.Exec("update cart_products set amount = ? where cart_id = ? and prod_id = ?",
+		amount, cartId, productId)
+
+	return err
+}
+
+func RemoveFromCart(username string, productId int64) error {
+	cartId, err := selectUserCartId(username)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec("delete from cart_products where cart_id = ? and prod_id = ?", cartId, productId)
+
+	return err
 }
 
 func AddOrder(username string, products []OrderProduct, address string) error {
