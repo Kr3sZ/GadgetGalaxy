@@ -77,7 +77,7 @@ func main() {
 		AllowOrigins:     []string{"http://localhost:4200", "http://localhost"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
+		ExposeHeaders:    []string{"Content-Length", "Content-Type", "Content-Disposition", "Content-Transfer-Encoding", "Content-Description"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
