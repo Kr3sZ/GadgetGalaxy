@@ -358,6 +358,28 @@ func SelectProductImage(id int64) ([]byte, error) {
 	return img, nil
 }
 
+func SelectAllCategories() ([]string, error) {
+	rows, err := db.Query("select distinct category from products")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var categories []string
+
+	for rows.Next() {
+		var category string
+
+		if err = rows.Scan(&category); err != nil {
+			return nil, err
+		}
+
+		categories = append(categories, category)
+	}
+
+	return categories, nil
+}
+
 func AddOrder(username string, products []OrderProduct, address string) error {
 	row, err := db.Query("select * from users where username = ?", username)
 

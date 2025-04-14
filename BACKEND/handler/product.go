@@ -121,6 +121,23 @@ func (h *ProductHandler) ProductImageHandler(c *gin.Context) {
 	c.Data(http.StatusOK, "application/octet-stream", img)
 }
 
+func (h *ProductHandler) AllCategoriesHandler(c *gin.Context) {
+	categories, err := dbquery.SelectAllCategories()
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": categories,
+	})
+}
+
 func (h *ProductHandler) OrderHandler(c *gin.Context) {
 	var order orderRequest
 
