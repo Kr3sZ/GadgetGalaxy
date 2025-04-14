@@ -1,11 +1,19 @@
-<div class="flex h-screen w-full bg-gray-100 justify-center">
+<div *ngIf="userDataUser" class="flex h-screen w-full bg-gray-100 justify-center">
   <div class="w-full bg-white rounded-2xl shadow-lg p-6">
-    <div class="flex items-center space-x-6">
-      <img src="https://placehold.co/150x150?text=PFP" alt="Profile Picture" class="w-32 h-32 rounded-full border-4 border-blue-500">
+    <div class="flex justify-between space-x-6">
       <div>
-        <h2 class="text-3xl font-semibold text-gray-800">John Doe</h2>
-        <p class="text-gray-600">john.doe&#64;ample.com</p>
-        <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700">Edit Profile</button>
+        <h2 class="text-3xl font-semibold text-gray-800">{{userDataUser.firstName}} {{userDataUser.lastName}}</h2>
+        <p class="text-gray-600">{{userDataUser.email}}</p>
+      </div>
+      <div>
+        <button class="m-4 p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+          <fa-icon [icon]="faUser" class="px-1"></fa-icon>
+          Edit Profile
+        </button>
+        <button (click)="logoutUser()" class="m-4 p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+          <fa-icon [icon]="faSignOutAlt" class="px-1"></fa-icon>
+          Logout
+        </button>
       </div>
     </div>
 
@@ -14,11 +22,11 @@
       <div class="mt-4 grid grid-cols-2 gap-4">
         <div>
           <p class="text-gray-600 font-medium">Phone</p>
-          <p class="text-gray-800">+1234567890</p>
+          <p class="text-gray-800">{{userDataUser.phoneNum}}</p>
         </div>
         <div>
           <p class="text-gray-600 font-medium">Birthdate</p>
-          <p class="text-gray-800">January 1, 1990</p>
+          <p class="text-gray-800">{{userDataUser.birthDate}}</p>
         </div>
       </div>
     </div>

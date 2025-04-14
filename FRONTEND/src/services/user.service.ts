@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {RegisterUser} from '../models/user/register-user';
 import {Observable} from 'rxjs';
 import {LoginUser} from '../models/user/login-user';
-import {ProductResponse} from '../models/product/product-response';
 import {UserData} from '../models/user/user-data';
 import {UserDataResponse} from '../models/user/user-data-response';
 
@@ -23,7 +21,7 @@ export class UserService {
       }
     );
   }
-  registerUser(user: RegisterUser): Observable<any> {
+  registerUser(user: UserData): Observable<any> {
     return this.http.post<any>(this.baseUrl+"register", user);
   }
 

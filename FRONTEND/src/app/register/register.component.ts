@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { RegisterUser } from '../../models/user/register-user';
 import { HttpClientModule } from '@angular/common/http';
 import {NgIf} from '@angular/common';
+import {UserData} from '../../models/user/user-data';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +24,7 @@ export class RegisterComponent {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
+      phoneNum: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       birthdate: ['', Validators.required],
@@ -37,7 +37,7 @@ export class RegisterComponent {
     }
 
     this.registerIsSubmitting = true;
-    const user: RegisterUser = this.registerForm.value;
+    const user: UserData = this.registerForm.value;
 
     this.userService.registerUser(user).subscribe({
       next: (response) => {

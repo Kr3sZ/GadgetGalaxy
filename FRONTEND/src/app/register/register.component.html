@@ -24,8 +24,8 @@
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700" for="phone">Phone Number</label>
-        <input id="phone" formControlName="phoneNumber" type="tel" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your phone number" required>
-        <div *ngIf="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched" class="text-red-500 text-sm">Phone number is required.</div>
+        <input id="phone" formControlName="phoneNum" type="tel" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Enter your phone number" required>
+        <div *ngIf="registerForm.get('phoneNum')?.invalid && registerForm.get('phoneNum')?.touched" class="text-red-500 text-sm">Phone number is required.</div>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700" for="birthdate">Birthdate</label>
