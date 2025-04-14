@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"fmt"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -21,7 +22,6 @@ type (
 	}
 
 	orderRequest struct {
-		Username string                 `json:"username"`
 		Products []dbquery.OrderProduct `json:"products"`
 		Address  string                 `json:"address"`
 	}
@@ -132,7 +132,19 @@ func (h *ProductHandler) OrderHandler(c *gin.Context) {
 		return
 	}
 
-	if err := dbquery.AddOrder(order.Username, order.Products, order.Address); err != nil {
+	session := sessions.Default(c)
+	token := session.Get("id")
+	user, err := dbquery.SelectUserByToken(fmt.Sprint(token))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err = dbquery.AddOrder(user.Username, order.Products, order.Address); err != nil {
 		status := http.StatusInternalServerError
 
 		if errors.Is(err, dbquery.NotFoundErr) {
