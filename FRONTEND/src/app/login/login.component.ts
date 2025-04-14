@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { UserService } from '../services/user.service';
-import { LoginUser } from '../models/login-user';
+import { UserService } from '../../services/user.service';
+import { LoginUser } from '../../models/user/login-user';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -13,8 +13,8 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  isSubmitting = false;
-  error: string | null = null;
+  loginIsSubmitting = false;
+  loginError: string | null = null;
 
   constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
     this.loginForm = this.fb.group({
@@ -28,19 +28,19 @@ export class LoginComponent {
       return;
     }
 
-    this.isSubmitting = true;
+    this.loginIsSubmitting = true;
     const user: LoginUser = this.loginForm.value;
 
     this.userService.loginUser(user).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
-        this.isSubmitting = false;
+        this.loginIsSubmitting = false;
         this.router.navigate(['/']); // Redirect to home or another page
       },
       error: (err) => {
         console.error('Login failed:', err);
-        this.error = 'Login failed. Please check your credentials.';
-        this.isSubmitting = false;
+        this.loginError = 'Login failed. Please check your credentials.';
+        this.loginIsSubmitting = false;
       },
     });
   }

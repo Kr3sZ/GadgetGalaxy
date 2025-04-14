@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import { UserService } from '../services/user.service';
-import { RegisterUser } from '../models/register-user';
+import { UserService } from '../../services/user.service';
+import { RegisterUser } from '../../models/user/register-user';
 import { HttpClientModule } from '@angular/common/http';
 import {NgIf} from '@angular/common';
 
@@ -15,8 +15,8 @@ import {NgIf} from '@angular/common';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  isSubmitting = false;
-  error: string | null = null;
+  registerIsSubmitting = false;
+  registerError: string | null = null;
 
   constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
     this.registerForm = this.fb.group({
@@ -36,19 +36,19 @@ export class RegisterComponent {
       return;
     }
 
-    this.isSubmitting = true;
+    this.registerIsSubmitting = true;
     const user: RegisterUser = this.registerForm.value;
 
     this.userService.registerUser(user).subscribe({
       next: (response) => {
         console.log('Registration successful:', response);
-        this.isSubmitting = false;
+        this.registerIsSubmitting = false;
         this.router.navigate(['/login']);
       },
       error: (err) => {
         console.error('Registration failed:', err);
-        this.error = 'Registration failed. Please try again.';
-        this.isSubmitting = false;
+        this.registerError = 'Registration failed. Please try again.';
+        this.registerIsSubmitting = false;
       },
     });
   }

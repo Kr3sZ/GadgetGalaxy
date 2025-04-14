@@ -3,29 +3,29 @@
   <nav class="bg-white shadow-md p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-gray-800">Gadget Galaxy</h1>
     <div class="flex space-x-4 items-center">
-      <a href="/cart" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
+      <a href="/cart" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
         <fa-icon [icon]="faShoppingCart" class="px-1"></fa-icon>
         Cart
       </a>
 
       <!-- Saját fiók dropdown -->
       <div class="relative inline-block text-left">
-        <button (click)="dropdownOpen = !dropdownOpen" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+        <button (click)="accountDropdown = !accountDropdown" class="flex items-center px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900">
           <fa-icon [icon]="faUser" class="px-1"></fa-icon>
           Account
         </button>
 
-        <div *ngIf="dropdownOpen" class="absolute right-0 mt-2 w-64 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+        <div *ngIf="accountDropdown" class="absolute right-0 mt-2 w-64 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
           <div class="flex p-4 justify-around items-center">
             <h2>You are not logged in!</h2>
           </div>
           <div class="flex p-4 justify-between items-center">
             <a href="/login" class="">
-              <fa-icon [icon]="faSignInAlt"></fa-icon>
+              <fa-icon [icon]="faSignInAlt" class="px-1"></fa-icon>
               Login
             </a>
             <a href="/register" class="">
-              <fa-icon [icon]="faUserPlus"></fa-icon>
+              <fa-icon [icon]="faUserPlus" class="px-1"></fa-icon>
               Register
             </a>
           </div>
@@ -57,10 +57,10 @@
   <div class="p-6 max-w-5xl mx-auto">
     <h2 class="text-xl font-semibold text-gray-800 mb-4">Products</h2>
     <div class="grid grid-cols-3 gap-6">
-      <div *ngIf="isLoading">Loading products...</div>
-      <div *ngIf="error">{{ error }}</div>
+      <div *ngIf="productsIsLoading">Loading products...</div>
+      <div *ngIf="productsError">{{ productsError }}</div>
 
-      <div class="bg-white p-4 rounded-lg shadow-lg" *ngFor="let product of products">
+      <div class="bg-white p-4 rounded-lg shadow-lg" *ngFor="let product of productsList">
         <img src="http://localhost:8080/api/productImage/{{product.id}}" class="w-full h-40 object-cover rounded-md">
         <h3 class="mt-2 font-semibold">{{product.name}}</h3>
         <p class="text-gray-600">{{product.price}}</p>

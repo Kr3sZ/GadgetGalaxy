@@ -42,8 +42,8 @@
         <input id="confirmPassword" formControlName="confirmPassword" type="password" class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-300" placeholder="Confirm your password" required>
         <div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" class="text-red-500 text-sm">Password confirmation is required.</div>
       </div>
-      <button type="submit" [disabled]="isSubmitting" class="w-full bg-purple-700 text-white py-2 rounded-lg font-medium">Register</button>
-      <div *ngIf="error" class="text-red-500 text-sm mt-2">{{ error }}</div>
+      <button type="submit" [disabled]="registerIsSubmitting" class="w-full bg-purple-700 text-white py-2 rounded-lg font-medium">Register</button>
+      <div *ngIf="registerError" class="text-red-500 text-sm mt-2">{{ registerError }}</div>
     </form>
     <p class="mt-4 text-center text-sm text-gray-600">
       Already have an account? <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" class="text-purple-600 hover:underline">Login</a>
