@@ -143,7 +143,7 @@ func main() {
 
 		c.JSON(http.StatusOK, gin.H{
 			"error":   false,
-			"message": string(hash),
+			"message": hash,
 		})
 	})
 	// ---
