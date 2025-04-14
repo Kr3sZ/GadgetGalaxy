@@ -1,1 +1,46 @@
-<p>admin works!</p>
+<div class="p-4">
+  <h1 class="text-2xl font-bold mb-4">Admin Panel</h1>
+
+  <div *ngIf="!isLoggedIn" class="text-red-500">
+    <p>You are not logged in as an admin.</p>
+  </div>
+
+  <div *ngIf="isLoggedIn">
+    <button (click)="logout()" class="bg-red-500 text-white px-4 py-2 rounded mb-4">
+      Logout
+    </button>
+
+    <div *ngIf="successMessage" class="bg-green-500 text-white p-2 rounded mb-4">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="bg-red-500 text-white p-2 rounded mb-4">
+      {{ errorMessage }}
+    </div>
+
+    <h2 class="text-xl font-semibold mb-2">Add Product</h2>
+    <form [formGroup]="addProductForm" (ngSubmit)="addProduct()" class="space-y-4">
+      <input formControlName="id" type="number" placeholder="Product ID" class="border p-2 w-full" />
+      <input formControlName="name" type="text" placeholder="Product Name" class="border p-2 w-full" />
+      <input formControlName="category" type="text" placeholder="Category" class="border p-2 w-full" />
+      <input formControlName="price" type="number" placeholder="Price" class="border p-2 w-full" />
+      <input formControlName="amount" type="number" placeholder="Amount" class="border p-2 w-full" />
+      <textarea formControlName="description" placeholder="Description" class="border p-2 w-full"></textarea>
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        class="border p-2 w-full"
+        required
+      />
+      <button type="submit" [disabled]="addProductForm.invalid" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Add Product
+      </button>
+    </form>
+    <h2 class="text-xl font-semibold mt-6 mb-2">Remove Product</h2>
+    <form [formGroup]="removeProductForm" (ngSubmit)="removeProduct()" class="space-y-4">
+      <input formControlName="id" type="number" placeholder="Product ID" class="border p-2 w-full" />
+      <button type="submit" [disabled]="removeProductForm.invalid" class="bg-red-500 text-white px-4 py-2 rounded">
+        Remove Product
+      </button>
+    </form>
+  </div>
+</div>
