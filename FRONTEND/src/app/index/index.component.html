@@ -2,12 +2,38 @@
   <!-- Navbar -->
   <nav class="bg-white shadow-md p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-gray-800">Gadget Galaxy</h1>
-    <div class="flex space-x-4">
-      <a href="/cart" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">Cart</a>
-      <a href="/login" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Login</a>
-      <a href="/register" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Sign Up</a>
+    <div class="flex space-x-4 items-center">
+      <a href="/cart" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
+        <fa-icon [icon]="faShoppingCart" class="px-1"></fa-icon>
+        Cart
+      </a>
+
+      <!-- Saját fiók dropdown -->
+      <div class="relative inline-block text-left">
+        <button (click)="dropdownOpen = !dropdownOpen" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          <fa-icon [icon]="faUser" class="px-1"></fa-icon>
+          Account
+        </button>
+
+        <div *ngIf="dropdownOpen" class="absolute right-0 mt-2 w-64 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+          <div class="flex p-4 justify-around items-center">
+            <h2>You are not logged in!</h2>
+          </div>
+          <div class="flex p-4 justify-between items-center">
+            <a href="/login" class="">
+              <fa-icon [icon]="faSignInAlt"></fa-icon>
+              Login
+            </a>
+            <a href="/register" class="">
+              <fa-icon [icon]="faUserPlus"></fa-icon>
+              Register
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </nav>
+
 
   <!-- Search, Filter & Sort Bar -->
   <div class="p-6 max-w-5xl mx-auto flex justify-between items-center space-x-4">

@@ -1,21 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import {Product} from '../models/product';
-import {ProductService} from '../services/product.service';
-import {NgFor, NgIf} from '@angular/common';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Product } from '../models/product';
+import { ProductService } from '../services/product.service';
+import { NgFor, NgIf } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {faShoppingCart, faSignInAlt, faUser, faUserPlus} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-index',
-  imports: [NgFor, NgIf],
+  imports: [NgFor, NgIf, FontAwesomeModule],
   templateUrl: './index.component.html',
   standalone: true,
   styleUrl: './index.component.css'
 })
-export class IndexComponent implements OnInit{
+export class IndexComponent implements OnInit {
   products: Product[] = [];
   isLoading = false;
   error: string | null = null;
 
-  constructor(private productService: ProductService) {}
+  dropdownOpen = false;
+
+  constructor(
+    private productService: ProductService,
+    private eRef: ElementRef
+  ) {}
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -32,10 +39,19 @@ export class IndexComponent implements OnInit{
         }
         this.isLoading = false;
       },
-      error: (err) => {
+      error: () => {
         this.error = 'Failed to load products.';
         this.isLoading = false;
       },
     });
   }
+
+  toggleDropdown(): void {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  protected readonly faUser = faUser;
+  protected readonly faShoppingCart = faShoppingCart;
+  protected readonly faSignInAlt = faSignInAlt;
+  protected readonly faUserPlus = faUserPlus;
 }
