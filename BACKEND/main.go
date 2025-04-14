@@ -127,6 +127,7 @@ func main() {
 	api.GET("/productImage/:id", product.ProductImageHandler)
 	api.GET("/categories", product.AllCategoriesHandler)
 
+	apiAuth.GET("/getCart", product.UserCartHandler)
 	apiAuth.POST("/order", product.OrderHandler)
 	// ---
 

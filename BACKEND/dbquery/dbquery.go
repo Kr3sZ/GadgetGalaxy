@@ -61,6 +61,13 @@ type (
 		Description string  `json:"description"`
 	}
 
+	CartProduct struct {
+		Id     int64   `json:"id"`
+		Name   string  `json:"name"`
+		Price  float64 `json:"price"`
+		Amount int64   `json:"amount"`
+	}
+
 	OrderProduct struct {
 		Id       int64 `json:"id"`
 		Quantity int64 `json:"quantity"`
@@ -319,6 +326,34 @@ func SelectAllCategories() ([]string, error) {
 	}
 
 	return categories, nil
+}
+
+func SelectUserCart(username string) ([]CartProduct, error) {
+	rows, err := db.Query("select prod_id, name, price, cart_products.amount from carts inner join cart_products on carts.id = cart_products.cart_id  inner join products on cart_products.prod_id = products.id where username like ?",
+		username)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var products []CartProduct
+
+	for rows.Next() {
+		var product CartProduct
+
+		err = rows.Scan(&product.Id,
+			&product.Name,
+			&product.Price,
+			&product.Amount)
+
+		if err != nil {
+			return nil, err
+		}
+
+		products = append(products, product)
+	}
+
+	return products, nil
 }
 
 func AddOrder(username string, products []OrderProduct, address string) error {
