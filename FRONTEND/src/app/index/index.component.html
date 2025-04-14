@@ -56,19 +56,19 @@
 
   <!-- Search, Filter & Sort Bar -->
   <div class="p-6 max-w-5xl mx-auto flex justify-between items-center space-x-4">
-    <input type="text" placeholder="Search for products..." class="w-2/4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
-    <select class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
-      <option value="all">All Categories</option>
-      <option value="electronics">Electronics</option>
-      <option value="clothing">Clothing</option>
-      <option value="home">Home & Kitchen</option>
-      <option value="sports">Sports</option>
+    <div *ngIf="categoriesIsLoading">Loading categories...</div>
+    <div *ngIf="categoriesError">{{ categoriesError }}</div>
+    <input (change)="searchProduct()" [(ngModel)]="searchInput" type="text" placeholder="Search for products..." class="w-2/4 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+    <select (change)="searchProduct()" [(ngModel)]="searchCategory" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+      <option value="">Category</option>
+      <option *ngFor="let category of categoriesList" [value]="category">{{category}}</option>
     </select>
-    <select class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
-      <option value="default">Sort By</option>
-      <option value="price-low">Price: Low to High</option>
-      <option value="price-high">Price: High to Low</option>
-      <option value="newest">Newest Arrivals</option>
+    <select (change)="sortProducts()" [(ngModel)]="searchSort" class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+      <option value="">Sort By</option>
+      <option value="0">Price: Low to High</option>
+      <option value="1">Price: High to Low</option>
+      <option value="2">Price: A to Z</option>
+      <option value="3">Price: Z to A</option>
     </select>
   </div>
 
