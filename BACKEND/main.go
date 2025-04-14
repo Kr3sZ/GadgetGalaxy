@@ -136,8 +136,8 @@ func main() {
 	// ---
 
 	// --- Test endpoints ---
-	apiAuth.GET("/hello", func(c *gin.Context) {
-		hash, _ := utils.Hash("test")
+	api.GET("/hello", func(c *gin.Context) {
+		hash, _ := utils.Hash("admin_1744628871")
 
 		c.JSON(http.StatusOK, gin.H{
 			"error":   false,

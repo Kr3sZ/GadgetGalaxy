@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"gadgetGalaxy/dbquery"
-	"gadgetGalaxy/utils"
 )
 
 type (
@@ -55,7 +54,7 @@ func (h *AdminHandler) LoginHandler(c *gin.Context) {
 	}
 
 	session := sessions.Default(c)
-	hash, err := utils.Hash(loginReq.Username)
+	token, err := dbquery.SelectAdminToken(loginReq.Username)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -65,7 +64,7 @@ func (h *AdminHandler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	session.Set("id", hash)
+	session.Set("id", token)
 
 	if err = session.Save(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

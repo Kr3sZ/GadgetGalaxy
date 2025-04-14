@@ -438,3 +438,23 @@ func SelectAdminPassword(username string) (string, error) {
 
 	return pass, nil
 }
+
+func SelectAdminToken(username string) (string, error) {
+	row, err := db.Query("select token from admin where username like ?", username)
+
+	if err != nil {
+		return "", err
+	}
+
+	if !row.Next() {
+		return "", NotFoundErr
+	}
+
+	var token string
+
+	if err = row.Scan(&token); err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
