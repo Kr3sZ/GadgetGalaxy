@@ -29,7 +29,6 @@ type (
 	}
 
 	updatePassRequest struct {
-		Username    string `json:"username"`
 		OldPassword string `json:"oldPassword"`
 		NewPassword string `json:"newPassword"`
 	}
@@ -211,7 +210,9 @@ func (h *UserHandler) NewPassHandler(c *gin.Context) {
 		return
 	}
 
-	user, err := dbquery.SelectUserByName(updatePassReq.Username)
+	session := sessions.Default(c)
+	token := session.Get("id")
+	user, err := dbquery.SelectUserByName(fmt.Sprint(token))
 
 	if err != nil {
 		if errors.Is(err, dbquery.NotFoundErr) {
