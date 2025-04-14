@@ -4,17 +4,22 @@ import {UserService} from '../../services/user.service';
 import {Router} from '@angular/router';
 import {NgFor, NgIf} from '@angular/common';
 import {CartProduct} from '../../models/product/cart-product';
+import {faTrashCan, faUser} from "@fortawesome/free-solid-svg-icons";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {ProductService} from '../../services/product.service';
+import {CartResponse} from '../../models/product/cart-response';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-cart',
-  imports: [ NgIf, NgFor],
+    imports: [NgIf, NgFor, FaIconComponent],
   standalone: true,
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
 
-  constructor( private userService: UserService,public router: Router) {}
+  constructor( private userService: UserService, private productService: ProductService, public router: Router) {}
 
   // USER DATA
 
@@ -69,4 +74,23 @@ export class CartComponent {
   getTotal(): number {
     return this.products.reduce((total, product) => total + product.price * product.amount, 0);
   }
+
+  deleteProduct(productId: number): void {
+
+    this.productService.deleteProduct(productId).subscribe({
+      next: (res: {error:string, message:string}) => {
+        if (!res.error) {
+          this.fetchCart();
+        } else {
+          this.productError = 'Something went wrong!';
+        }
+      },
+      error: () => {
+        this.productError = 'Failed to load cart data.';
+      },
+    });
+  }
+
+    protected readonly faUser = faUser;
+  protected readonly faTrashCan = faTrashCan;
 }
