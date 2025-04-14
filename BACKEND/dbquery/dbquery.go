@@ -484,10 +484,10 @@ func SelectAdminToken(username string) (string, error) {
 func AddProduct(product Product, img []byte) error {
 	_, err := db.Exec("insert into products (name, category, price, amount, description, image) values (?, ?, ?, ?, ?, ?)",
 		product.Name, product.Category, product.Price, product.Amount, product.Description, img)
+	return err
+}
 
-	if err != nil {
-		return err
-	}
-
-	return nil
+func RemoveProduct(id int64) error {
+	_, err := db.Exec("delete from products where id = ?", id)
+	return err
 }

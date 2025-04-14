@@ -135,6 +135,7 @@ func main() {
 
 	apiAdminAuth.GET("/logout", admin.LogoutHandler)
 	apiAdminAuth.POST("/addProduct", admin.NewProductHandler)
+	apiAdminAuth.DELETE("/removeProduct", admin.RemoveProductHandler)
 	// ---
 
 	// --- Test endpoints ---

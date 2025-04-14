@@ -14,6 +14,10 @@ import (
 type (
 	AdminHandler struct {
 	}
+
+	removeProductRequest struct {
+		Id int64 `json:"id"`
+	}
 )
 
 func NewAdminHandler() *AdminHandler {
@@ -138,6 +142,31 @@ func (h *AdminHandler) NewProductHandler(c *gin.Context) {
 	}
 
 	if err = dbquery.AddProduct(product, img); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "success",
+	})
+}
+
+func (h *AdminHandler) RemoveProductHandler(c *gin.Context) {
+	var removeProductReq removeProductRequest
+
+	if err := c.ShouldBindJSON(&removeProductReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err := dbquery.RemoveProduct(removeProductReq.Id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   true,
 			"message": err.Error(),
