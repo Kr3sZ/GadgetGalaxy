@@ -330,7 +330,8 @@ func SearchProducts(keyword string, category string, sort Sort) ([]Product, erro
 		lowerDesc := strings.ToLower(product.Description)
 		lowerProdCat := strings.ToLower(product.Category)
 
-		if (strings.Contains(lowerName, lowerKeyword) || strings.Contains(lowerDesc, lowerKeyword)) && strings.Contains(lowerProdCat, lowerCat) {
+		if (strings.Contains(lowerName, lowerKeyword) || strings.Contains(lowerProdCat, lowerKeyword) ||
+			strings.Contains(lowerDesc, lowerKeyword)) && strings.Contains(lowerProdCat, lowerCat) {
 			foundProd = append(foundProd, product)
 		}
 	}
