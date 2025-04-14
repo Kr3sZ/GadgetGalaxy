@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { RegisterService } from '../services/register.service';
+import { UserService } from '../services/user.service';
 import { RegisterUser } from '../models/register-user';
 import { HttpClientModule } from '@angular/common/http';
 import {NgIf} from '@angular/common';
@@ -18,7 +18,7 @@ export class RegisterComponent {
   isSubmitting = false;
   error: string | null = null;
 
-  constructor(private fb: FormBuilder, private registerService: RegisterService) {
+  constructor(private fb: FormBuilder, private userService: UserService) {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
       firstName: ['', Validators.required],
@@ -39,7 +39,7 @@ export class RegisterComponent {
     this.isSubmitting = true;
     const user: RegisterUser = this.registerForm.value;
 
-    this.registerService.registerUser(user).subscribe({
+    this.userService.registerUser(user).subscribe({
       next: (response) => {
         console.log('Registration successful:', response);
         this.isSubmitting = false;
