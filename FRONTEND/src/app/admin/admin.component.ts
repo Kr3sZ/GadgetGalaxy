@@ -73,13 +73,25 @@ export class AdminComponent {
     }
 
     const formData = new FormData();
-    Object.entries(this.addProductForm.value).forEach(([key, value]) => {
-      if (key === 'image' && value instanceof File) {
-        formData.append('file', value); // Append the file with the key 'file'
-      } else {
-        formData.append(key, value as string);
-      }
-    });
+
+    // Create a product object from the form values
+    const product = {
+      id: this.addProductForm.value.id,
+      name: this.addProductForm.value.name,
+      category: this.addProductForm.value.category,
+      price: this.addProductForm.value.price,
+      amount: this.addProductForm.value.amount,
+      description: this.addProductForm.value.description,
+    };
+
+    // Append the JSON string of the product object
+    formData.append('json', JSON.stringify(product));
+
+    // Append the file
+    const imageFile = this.addProductForm.value.image;
+    if (imageFile instanceof File) {
+      formData.append('file', imageFile);
+    }
 
     this.userService.addProduct(formData).subscribe({
       next: () => {
@@ -87,8 +99,8 @@ export class AdminComponent {
         this.addProductForm.reset();
         setTimeout(() => (this.successMessage = null), 3000);
       },
-      error: () => {
-        this.errorMessage = 'Failed to add product.';
+      error: (err) => {
+        this.errorMessage = `Failed to add product: ${err.error.message}`;
         setTimeout(() => (this.errorMessage = null), 3000);
       },
     });
