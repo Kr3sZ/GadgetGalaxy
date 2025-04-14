@@ -2,13 +2,27 @@
   <div class="w-full bg-white rounded-2xl shadow-lg p-6">
     <div class="flex justify-between space-x-6">
       <div>
-        <h2 class="text-3xl font-semibold text-gray-800">{{userDataUser.firstName}} {{userDataUser.lastName}}</h2>
-        <p class="text-gray-600">{{userDataUser.email}}</p>
+        <h2 class="text-3xl font-semibold text-gray-800">{{userDataUser.username}}</h2>
+        <p class="text-gray-600">{{userDataUser.firstName}} {{userDataUser.lastName}}</p>
       </div>
       <div>
-        <button class="m-4 p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+        <button *ngIf="isEditingPassword || isEditingProfile"
+                (click)="isEditingProfile = false; isEditingPassword = false"
+                class="m-4 p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+          <fa-icon [icon]="faUser" class="px-1"></fa-icon>
+          View Profile
+        </button>
+        <button *ngIf="isEditingPassword || !isEditingProfile"
+                (click)="isEditingProfile = true; isEditingPassword = false; switchToEditProfile()"
+                class="m-4 p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
           <fa-icon [icon]="faUser" class="px-1"></fa-icon>
           Edit Profile
+        </button>
+        <button *ngIf="!isEditingPassword || isEditingProfile"
+                (click)="isEditingProfile = false; isEditingPassword = true"
+                class="m-4 p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+          <fa-icon [icon]="faUser" class="px-1"></fa-icon>
+          Change password
         </button>
         <button (click)="logoutUser()" class="m-4 p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
           <fa-icon [icon]="faSignOutAlt" class="px-1"></fa-icon>
@@ -17,28 +31,84 @@
       </div>
     </div>
 
-    <div class="mt-6 border-t pt-6">
-      <h3 class="text-xl font-semibold text-gray-800">Personal Information</h3>
-      <div class="mt-4 grid grid-cols-2 gap-4">
-        <div>
-          <p class="text-gray-600 font-medium">Phone</p>
-          <p class="text-gray-800">{{userDataUser.phoneNum}}</p>
+    <!-- PROFILE INSPECTION -->
+    <div *ngIf="!isEditingProfile && !isEditingPassword">
+      <div class="mt-6 border-t pt-6">
+        <h3 class="text-xl font-semibold text-gray-800">Personal Information</h3>
+        <div class="mt-4 grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-gray-600 font-medium">Phone</p>
+            <p class="text-gray-800">{{userDataUser.phoneNum}}</p>
+          </div>
+          <div>
+            <p class="text-gray-600 font-medium">Birthdate</p>
+            <p class="text-gray-800">{{userDataUser.birthDate}}</p>
+          </div>
+          <div>
+            <p class="text-gray-600 font-medium">Email</p>
+            <p class="text-gray-800">{{userDataUser.email}}</p>
+          </div>
         </div>
-        <div>
-          <p class="text-gray-600 font-medium">Birthdate</p>
-          <p class="text-gray-800">{{userDataUser.birthDate}}</p>
+      </div>
+
+      <div class="mt-6 border-t pt-6">
+        <h3 class="text-xl font-semibold text-gray-800">Order information</h3>
+        <div class="mt-4 grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-gray-600 font-medium">Address</p>
+            <p class="text-gray-800">New York, USA</p>
+          </div>
         </div>
+      </div>
+    </div>
+    <!-- PROFILE EDIT -->
+    <div *ngIf="isEditingProfile && !isEditingPassword">
+      <div class="mt-6 border-t pt-6">
+        <h3 class="text-xl font-semibold text-gray-800">Editing Profile</h3>
+        <div class="mt-4 grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-gray-600 font-medium">First Name</label>
+            <input type="text" [(ngModel)]="editFirstName" class="w-full p-2 border rounded-lg" />
+          </div>
+          <div>
+            <label class="text-gray-600 font-medium">Last Name</label>
+            <input type="text" [(ngModel)]="editLastName" class="w-full p-2 border rounded-lg" />
+          </div>
+          <div>
+            <label class="text-gray-600 font-medium">Email</label>
+            <input type="email" [(ngModel)]="editEmail" class="w-full p-2 border rounded-lg" />
+          </div>
+          <div>
+            <label class="text-gray-600 font-medium">Phone</label>
+            <input type="text" [(ngModel)]="editPhoneNum" class="w-full p-2 border rounded-lg" />
+          </div>
+        </div>
+        <button (click)="saveProfile()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          Save Changes
+        </button>
       </div>
     </div>
 
-    <div class="mt-6 border-t pt-6">
-      <h3 class="text-xl font-semibold text-gray-800">Order information</h3>
-      <div class="mt-4 grid grid-cols-2 gap-4">
-        <div>
-          <p class="text-gray-600 font-medium">Address</p>
-          <p class="text-gray-800">New York, USA</p>
+    <!-- PASSWORD EDIT -->
+    <div *ngIf="!isEditingProfile && isEditingPassword">
+      <div class="mt-6 border-t pt-6">
+        <h3 class="text-xl font-semibold text-gray-800">Change Password</h3>
+        <div class="mt-4 grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-gray-600 font-medium">Old Password</label>
+            <input type="password" [(ngModel)]="editOldPassword" class="w-full p-2 border rounded-lg" />
+          </div>
+          <div>
+            <label class="text-gray-600 font-medium">New Password</label>
+            <input type="password" [(ngModel)]="editNewPassword" class="w-full p-2 border rounded-lg" />
+          </div>
         </div>
+        <button (click)="changePassword()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          Save Password
+        </button>
       </div>
     </div>
+
+
   </div>
 </div>

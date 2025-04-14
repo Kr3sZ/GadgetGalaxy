@@ -1,6 +1,13 @@
 <div *ngIf="userDataUser" class="min-h-screen bg-gray-100 p-6">
   <!-- Cart Header -->
-  <h1 class="text-3xl font-bold text-gray-800 mb-4">Shopping Cart</h1>
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-3xl font-bold text-gray-800">Shopping Cart</h1>
+    <button
+      class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+      (click)="this.router.navigate(['/'])">
+      Back
+    </button>
+  </div>
 
   <!-- Cart Items -->
   <div class="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
@@ -10,31 +17,21 @@
         <th class="p-3 border-b">Product</th>
         <th class="p-3 border-b">Price</th>
         <th class="p-3 border-b">Quantity</th>
-        <th class="p-3 border-b">Total</th>
-        <th class="p-3 border-b">Action</th>
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td class="p-3 border-b">Product 1</td>
-        <td class="p-3 border-b">$49.99</td>
-        <td class="p-3 border-b"><input type="number" value="1" class="w-16 border rounded-lg px-2 py-1"></td>
-        <td class="p-3 border-b">$49.99</td>
-        <td class="p-3 border-b"><button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Remove</button></td>
-      </tr>
-      <tr>
-        <td class="p-3 border-b">Product 2</td>
-        <td class="p-3 border-b">$79.99</td>
-        <td class="p-3 border-b"><input type="number" value="1" class="w-16 border rounded-lg px-2 py-1"></td>
-        <td class="p-3 border-b">$79.99</td>
-        <td class="p-3 border-b"><button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Remove</button></td>
+      <tr *ngFor="let product of products">
+        <td class="p-3 border-b">{{product.name}}</td>
+        <td class="p-3 border-b">{{product.price}} Ft</td>
+        <td class="p-3 border-b">{{product.amount}}</td>
       </tr>
       </tbody>
     </table>
 
     <!-- Cart Summary -->
     <div class="mt-6 flex justify-between items-center">
-      <h2 class="text-xl font-semibold">Total: $129.98</h2>
+      <h2 class="text-xl font-semibold">Total: {{ getTotal() }} Ft</h2>
+
       <button class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">Proceed to Checkout</button>
     </div>
   </div>

@@ -4,6 +4,9 @@ import {Observable} from 'rxjs';
 import {LoginUser} from '../models/user/login-user';
 import {UserData} from '../models/user/user-data';
 import {UserDataResponse} from '../models/user/user-data-response';
+import {CartResponse} from '../models/product/cart-response';
+import {EditUser} from '../models/user/edit-user';
+import {EditPassword} from '../models/user/edit-password';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +36,26 @@ export class UserService {
   }
   logoutUser() {
     return this.http.get<any>(this.baseUrl+"auth/logout",
+      {
+        withCredentials: true
+      });
+  }
+
+  getCart() {
+    return this.http.get<CartResponse>(this.baseUrl+"auth/getCart",
+      {
+        withCredentials: true
+      });
+  }
+
+  updateUser(user: EditUser): Observable<any> {
+    return this.http.post<any>(this.baseUrl+"auth/editProfile", user,
+      {
+        withCredentials: true
+      });
+  }
+  updatePassword(user: EditPassword): Observable<any> {
+    return this.http.post<any>(this.baseUrl+"auth/newPass", user,
       {
         withCredentials: true
       });
