@@ -1,1 +1,44 @@
-<p>admin-login works!</p>
+<div class="flex h-full w-full items-center justify-center bg-gray-100">
+  <div class="max-h-full w-full max-w-md p-8 bg-white rounded-2xl shadow-lg overflow-auto">
+    <h2 class="text-2xl font-semibold text-center text-gray-800">Admin Login</h2>
+    <form [formGroup]="adminLoginForm" (ngSubmit)="onSubmit()" class="mt-6 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          formControlName="username"
+          class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter your username"
+          required
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700" for="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          formControlName="password"
+          class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        [disabled]="adminLoginForm.invalid || loginIsSubmitting"
+        class="w-full bg-blue-950 text-white py-2 rounded-lg font-medium"
+      >
+        Login
+      </button>
+    </form>
+  </div>
+  <div *ngIf="successMessage" class="fixed bottom-4 right-4 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="loginError" class="fixed bottom-4 right-4 bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg">
+    {{ loginError }}
+  </div>
+</div>
