@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { HttpClientModule } from '@angular/common/http';
-import {NgIf} from '@angular/common';
-import {UserData} from '../../models/user/user-data';
+import { NgIf } from '@angular/common';
+import { UserData } from '../../models/user/user-data';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-register',
@@ -36,8 +37,21 @@ export class RegisterComponent {
       return;
     }
 
+    const formValue = this.registerForm.value;
+
+    // Check if password and confirmPassword match
+    if (formValue.password !== formValue.confirmPassword) {
+      this.registerError = 'Passwords do not match.';
+      return;
+    }
+
     this.registerIsSubmitting = true;
-    const user: UserData = this.registerForm.value;
+
+    // Hash the password field
+    formValue.password = CryptoJS.SHA256(formValue.password).toString();
+    delete formValue.confirmPassword; // Remove confirmPassword before sending to the server
+
+    const user: UserData = formValue;
 
     this.userService.registerUser(user).subscribe({
       next: (response) => {

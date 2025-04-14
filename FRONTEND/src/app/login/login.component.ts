@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { UserService } from '../../services/user.service';
 import { LoginUser } from '../../models/user/login-user';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,13 @@ export class LoginComponent {
     }
 
     this.loginIsSubmitting = true;
-    const user: LoginUser = this.loginForm.value;
+
+    const formValue = this.loginForm.value;
+
+    // Hash the password field
+    formValue.password = CryptoJS.SHA256(formValue.password).toString();
+
+    const user: LoginUser = formValue;
 
     this.userService.loginUser(user).subscribe({
       next: (response) => {
