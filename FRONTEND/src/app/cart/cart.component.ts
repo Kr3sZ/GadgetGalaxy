@@ -74,13 +74,17 @@ export class CartComponent {
   getTotal(): number {
     return this.products.reduce((total, product) => total + product.price * product.amount, 0);
   }
+  successMessage: string | null = null;
 
   deleteProduct(productId: number): void {
-
     this.productService.deleteProduct(productId).subscribe({
-      next: (res: {error:string, message:string}) => {
+      next: (res: { error: string, message: string }) => {
         if (!res.error) {
+          this.successMessage = 'Product removed from cart successfully!';
           this.fetchCart();
+          setTimeout(() => {
+            this.successMessage = null;
+          }, 3000); // Hide the message after 3 seconds
         } else {
           this.productError = 'Something went wrong!';
         }

@@ -31,4 +31,10 @@ export class ProductService {
         withCredentials: true
       });
   }
+  addProduct(id: number) : Observable<{error:string, message:string}> {
+    return this.http.post<{error:string, message:string}>(this.baseUrl+"auth/addToCart", { productId: id},
+      {
+        withCredentials: true
+      });
+  }
 }

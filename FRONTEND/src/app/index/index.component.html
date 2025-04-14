@@ -88,7 +88,14 @@
 
         </div>
         <p class="text-gray-600">{{product.description}}</p>
-        <button class="mt-2 w-full bg-blue-600 text-white py-2 rounded-lg">Add to Cart</button>
+        <div *ngIf="successMessage" class="fixed bottom-4 right-4 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg">
+          {{ successMessage }}
+        </div>
+        <!-- Quantity Input -->
+        <div class="flex justify-between items-center mt-2">
+          <button (click)="addProduct(product.id)" class="bg-blue-600 text-white py-2 px-4 rounded-lg">Add to Cart</button>
+          <input [(ngModel)]="amount" type="number" min="1" class="w-16 text-center border rounded-lg ml-2" placeholder="1" />
+        </div>
       </div>
     </div>
   </div>

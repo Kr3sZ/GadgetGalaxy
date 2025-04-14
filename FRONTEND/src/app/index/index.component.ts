@@ -53,6 +53,29 @@ export class IndexComponent implements OnInit {
       },
     });
   }
+  amount : number = 1;
+
+  successMessage: string | null = null;
+
+  addProduct(productId: number): void {
+    for (let i = 0; i < this.amount; i++) {
+      this.productService.addProduct(productId).subscribe({
+        next: (res: { error: string, message: string }) => {
+          if (!res.error) {
+            this.successMessage = 'Product added to cart successfully!';
+            setTimeout(() => {
+              this.successMessage = null;
+            }, 3000); // Hide the message after 3 seconds
+          } else {
+            this.productsError = 'Something went wrong!';
+          }
+        },
+        error: () => {
+          this.productsError = 'Failed to load cart data.';
+        },
+      });
+    }
+  }
 
   searchProduct() : void {
     this.productsIsLoading = true;
