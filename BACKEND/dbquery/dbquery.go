@@ -388,7 +388,17 @@ func AddToCart(username string, productId int64) error {
 		return err
 	}
 
-	_, err = db.Exec("insert into cart_products (cart_id, prod_id, amount) values (?, ?, 1)", cartId, productId)
+	row, err := db.Query("select * from cart_products where cart_id = ? and prod_id = ?", cartId, productId)
+
+	if err != nil {
+		return err
+	}
+
+	if !row.Next() {
+		_, err = db.Exec("insert into cart_products (cart_id, prod_id, amount) values (?, ?, 1)", cartId, productId)
+	} else {
+		_, err = db.Exec("update cart_products set amount = amount + 1 where cart_id = ? and prod_id = ?", cartId, productId)
+	}
 
 	return err
 }
