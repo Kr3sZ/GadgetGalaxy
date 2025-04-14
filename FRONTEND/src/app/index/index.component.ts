@@ -3,7 +3,7 @@ import { Product } from '../../models/product/product';
 import { ProductService } from '../../services/product.service';
 import { NgFor, NgIf } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {faShoppingCart, faSignInAlt, faUser, faUserPlus} from '@fortawesome/free-solid-svg-icons';
+import {faHome, faShoppingCart, faSignInAlt, faUser, faUserPlus} from '@fortawesome/free-solid-svg-icons';
 import {UserService} from '../../services/user.service';
 import {UserData} from '../../models/user/user-data';
 
@@ -75,6 +75,22 @@ export class IndexComponent implements OnInit {
     });
   }
 
+  logoutUser() {
+    this.userService.logoutUser().subscribe({
+
+      next: (res) => {
+        if (!res.error) {
+          this.userDataUser = null;
+        } else {
+          this.userDataError = 'Something went wrong!';
+        }
+      },
+      error: () => {
+        this.userDataError = 'Failed to logout.';
+      },
+    });
+  }
+
 
 
   // ACCOUNT POPUP
@@ -88,4 +104,5 @@ export class IndexComponent implements OnInit {
   protected readonly faUser = faUser;
   protected readonly faSignInAlt = faSignInAlt;
   protected readonly faUserPlus = faUserPlus;
+  protected readonly faHome = faHome;
 }
