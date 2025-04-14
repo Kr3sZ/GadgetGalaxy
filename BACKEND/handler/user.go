@@ -251,3 +251,22 @@ func (h *UserHandler) NewPassHandler(c *gin.Context) {
 		"message": "success",
 	})
 }
+
+func (h *UserHandler) UserDataHandler(c *gin.Context) {
+	session := sessions.Default(c)
+	token := session.Get("id")
+	user, err := dbquery.SelectUserByToken(fmt.Sprint(token))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": user,
+	})
+}

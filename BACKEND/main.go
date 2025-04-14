@@ -5,7 +5,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
-	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
@@ -112,10 +111,6 @@ func main() {
 	}
 	// ---
 
-	// --- Admin pages ---
-	router.Use(addPage("/admin", "./public/pages/admin"))
-	// ---
-
 	// --- User handling ---
 	api.POST("/register", user.RegisterHandler)
 	api.POST("/login", user.LoginHandler)
@@ -123,6 +118,7 @@ func main() {
 	apiAuth.POST("/editProfile", user.UpdateHandler)
 	apiAuth.POST("/newPass", user.NewPassHandler)
 	apiAuth.GET("/logout", user.LogoutHandler)
+	apiAuth.GET("/userData", user.UserDataHandler)
 	// ---
 
 	// --- Product handling ---
@@ -153,8 +149,4 @@ func main() {
 	if err = router.Run(":8080"); err != nil {
 		log.Fatalf("error: %s\n", err.Error())
 	}
-}
-
-func addPage(urlPrefix string, root string) gin.HandlerFunc {
-	return static.Serve(urlPrefix, static.LocalFile(root, true))
 }
