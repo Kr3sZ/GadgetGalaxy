@@ -356,30 +356,48 @@ func SelectUserCart(username string) ([]CartProduct, error) {
 	return products, nil
 }
 
-func AddToCart(username string, productId int64) error {
+func selectUserCartId(username string) (int64, error) {
 	row, err := db.Query("select id from carts where username like ?", username)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	if !row.Next() {
-		return NotFoundErr
+		return 0, NotFoundErr
 	}
 
 	var cartId int64
 
 	if err = row.Scan(&cartId); err != nil {
-		return err
+		return 0, err
 	}
 
-	_, err = db.Exec("insert into cart_products (cart_id, prod_id, amount) values (?, ?, 1)", cartId, productId)
+	return cartId, nil
+}
+
+func AddToCart(username string, productId int64) error {
+	cartId, err := selectUserCartId(username)
 
 	if err != nil {
 		return err
 	}
 
-	return nil
+	_, err = db.Exec("insert into cart_products (cart_id, prod_id, amount) values (?, ?, 1)", cartId, productId)
+
+	return err
+}
+
+func RemoveFromCart(username string, productId int64) error {
+	cartId, err := selectUserCartId(username)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec("delete from cart_products where cart_id = ? and prod_id = ?", cartId, productId)
+
+	return err
 }
 
 func AddOrder(username string, products []OrderProduct, address string) error {

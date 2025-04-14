@@ -208,6 +208,43 @@ func (h *ProductHandler) AddToCartHandler(c *gin.Context) {
 	})
 }
 
+func (h *ProductHandler) RemoveFromCartHandler(c *gin.Context) {
+	var modifyCartReq modifyCartRequest
+
+	if err := c.ShouldBindJSON(&modifyCartReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	session := sessions.Default(c)
+	token := session.Get("id")
+	user, err := dbquery.SelectUserByToken(fmt.Sprint(token))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if err = dbquery.RemoveFromCart(user.Username, modifyCartReq.ProductId); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "success",
+	})
+}
+
 func (h *ProductHandler) OrderHandler(c *gin.Context) {
 	var order orderRequest
 
