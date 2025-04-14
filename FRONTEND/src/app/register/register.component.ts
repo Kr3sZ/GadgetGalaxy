@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import { UserService } from '../services/user.service';
 import { RegisterUser } from '../models/register-user';
 import { HttpClientModule } from '@angular/common/http';
@@ -18,7 +18,7 @@ export class RegisterComponent {
   isSubmitting = false;
   error: string | null = null;
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
       firstName: ['', Validators.required],
@@ -43,6 +43,7 @@ export class RegisterComponent {
       next: (response) => {
         console.log('Registration successful:', response);
         this.isSubmitting = false;
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         console.error('Registration failed:', err);
