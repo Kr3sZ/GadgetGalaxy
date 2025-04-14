@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 14, 2025 at 04:21 PM
+-- Generation Time: Apr 14, 2025 at 07:25 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -39,6 +39,45 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`username`, `password`, `token`) VALUES
 ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'aac251d35fac34d67660c9041fe5d5d0a827ed7f26720ebd5dccf88fb5f584cb');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `carts`
+--
+
+CREATE TABLE `carts` (
+  `id` int(11) NOT NULL,
+  `username` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `carts`
+--
+
+INSERT INTO `carts` (`id`, `username`) VALUES
+(1, 'username');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart_products`
+--
+
+CREATE TABLE `cart_products` (
+  `id` int(11) NOT NULL,
+  `cart_id` int(11) NOT NULL,
+  `prod_id` int(11) NOT NULL,
+  `amount` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart_products`
+--
+
+INSERT INTO `cart_products` (`id`, `cart_id`, `prod_id`, `amount`) VALUES
+(1, 1, 3, 2),
+(2, 1, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -141,6 +180,21 @@ ALTER TABLE `admin`
   ADD UNIQUE KEY `token` (`token`);
 
 --
+-- Indexes for table `carts`
+--
+ALTER TABLE `carts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `carts_users_username_fk` (`username`);
+
+--
+-- Indexes for table `cart_products`
+--
+ALTER TABLE `cart_products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cart_products_carts_id_fk` (`cart_id`),
+  ADD KEY `cart_products_products_id_fk` (`prod_id`);
+
+--
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
@@ -173,6 +227,18 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `carts`
+--
+ALTER TABLE `carts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `cart_products`
+--
+ALTER TABLE `cart_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
@@ -193,6 +259,19 @@ ALTER TABLE `products`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `carts`
+--
+ALTER TABLE `carts`
+  ADD CONSTRAINT `carts_users_username_fk` FOREIGN KEY (`username`) REFERENCES `users` (`username`);
+
+--
+-- Constraints for table `cart_products`
+--
+ALTER TABLE `cart_products`
+  ADD CONSTRAINT `cart_products_carts_id_fk` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`id`),
+  ADD CONSTRAINT `cart_products_products_id_fk` FOREIGN KEY (`prod_id`) REFERENCES `products` (`id`);
 
 --
 -- Constraints for table `orders`
