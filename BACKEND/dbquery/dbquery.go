@@ -404,6 +404,10 @@ func AddToCart(username string, productId int64) error {
 }
 
 func ModifyAmountInCart(username string, productId int64, amount int64) error {
+	if amount <= 0 {
+		return RemoveFromCart(username, productId)
+	}
+
 	cartId, err := selectUserCartId(username)
 
 	if err != nil {
