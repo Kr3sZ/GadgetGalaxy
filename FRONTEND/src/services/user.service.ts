@@ -69,4 +69,41 @@ export class UserService {
       }
     );
   }
+  addProduct(product: FormData): Observable<any> {
+    return this.http.post<any>(
+      this.baseUrl + "admin/auth/addProduct",
+      product,
+      {
+        withCredentials: true
+      }
+    );
+  }
+
+  removeProduct(productId: number): Observable<any> {
+    return this.http.delete<any>(
+      `${this.baseUrl}admin/auth/removeProduct`,
+      {
+        body: { productId: productId },
+        withCredentials: true
+      }
+    );
+  }
+
+  isAdminLoggedIn(): Observable<any> {
+    return this.http.get<any>(
+      this.baseUrl + "admin/auth/isLoggedIn",
+      {
+        withCredentials: true
+      }
+    );
+  }
+
+  adminLogout(): Observable<any> {
+    return this.http.get<any>(
+      this.baseUrl + "admin/auth/logout",
+      {
+        withCredentials: true
+      }
+    );
+  }
 }
